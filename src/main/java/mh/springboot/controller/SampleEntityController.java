@@ -1,7 +1,7 @@
 package mh.springboot.controller;
 
-import mh.springboot.dao.EntityService;
-import mh.springboot.model.Entity;
+import mh.springboot.dao.SampleEntityService;
+import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,41 +11,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-
 @RestController
-@RequestMapping("/api/entity")
-public class EntityController {
+@RequestMapping("/api/sampleentity")
+public class SampleEntityController {
 
     @Autowired
-    EntityService entityService;
+    SampleEntityService sampleEntityService;
 
     @RequestMapping(method= RequestMethod.GET)
-    public Collection<Entity> getAll() {
-        return entityService.findAll();
+    public Iterable<SampleEntity> getAll() {
+        return sampleEntityService.findAll();
     }
 
     @RequestMapping(method=RequestMethod.GET, value="{id}")
-    public Entity getById(@PathVariable Long id) {
-        return entityService.findById(id);
+    public SampleEntity getById(@PathVariable Long id) {
+        return sampleEntityService.findOne(id);
     }
 
     @RequestMapping(method=RequestMethod.POST)
     @ResponseStatus(value= HttpStatus.CREATED)
-    public Entity create(@RequestBody Entity entity) {
-        return entityService.create(entity);
+    public SampleEntity create(@RequestBody SampleEntity sampleEntity) {
+        return sampleEntityService.save(sampleEntity);
     }
 
-    @RequestMapping(method=RequestMethod.PUT)
+    @RequestMapping(method=RequestMethod.PUT, value="{id}")
     @ResponseStatus(value= HttpStatus.OK)
-    public Entity update(@RequestBody Entity entity) {
-        return entityService.update(entity);
+    public SampleEntity update(@PathVariable long id, @RequestBody SampleEntity sampleEntity) {
+        if(id != sampleEntity.getId()) {
+            throw new RuntimeException();
+        }
+        return sampleEntityService.save(sampleEntity);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable Long id) {
-        entityService.delete(id);
+        sampleEntityService.delete(id);
     }
 
 
