@@ -3,6 +3,8 @@ package mh.springboot.controller;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,11 @@ public class SampleEntityController {
     @RequestMapping(method= RequestMethod.GET)
     public Iterable<SampleEntity> getAll() {
         return sampleEntityService.findAll();
+    }
+
+    @RequestMapping(method= RequestMethod.GET, value="{page}/{size}")
+    public Page<SampleEntity> getAllPagination(@PathVariable Integer page, @PathVariable Integer size) {
+        return sampleEntityService.findAll(new PageRequest(page, size));
     }
 
     @RequestMapping(method=RequestMethod.GET, value="{id}")
@@ -48,7 +55,5 @@ public class SampleEntityController {
     public void delete(@PathVariable Long id) {
         sampleEntityService.delete(id);
     }
-
-
 
 }

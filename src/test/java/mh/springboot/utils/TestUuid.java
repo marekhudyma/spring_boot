@@ -1,4 +1,4 @@
-package mh.springboot;
+package mh.springboot.utils;
 
 import java.util.UUID;
 

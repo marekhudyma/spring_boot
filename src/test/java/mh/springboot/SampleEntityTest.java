@@ -3,6 +3,7 @@ package mh.springboot;
 import com.google.common.collect.ImmutableList;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
+import mh.springboot.utils.FakePage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,13 +20,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertNull;
-import static mh.springboot.TestUuid.uuid;
+import static mh.springboot.utils.TestUuid.uuid;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -46,10 +49,13 @@ public class SampleEntityTest {
 
     private RestTemplate restTemplate;
 
+    static class FakeSampleEntityPage extends FakePage<SampleEntity> {};
+
     @Before
     public void setUp() {
         url = String.format("http://localhost:%s/api/sampleentity", port);
         restTemplate = new RestTemplate();
+        sampleEntityService.deleteAll();
     }
 
     @After
@@ -141,6 +147,49 @@ public class SampleEntityTest {
         expected.setId(id);
         assertEquals(1, actual.size());
         assertTrue(reflectionEquals(expected, actual.get(0), "created", "lastModified"));
+    }
+
+    @Test
+    public void testEntity_getAll() throws Exception {
+        Set<Long> expected = new HashSet<>();
+        for(int i=0; i<105; i++) {
+            SampleEntity entity = sampleEntityService.save(create(String.format("name%d", i), uuid(i)));
+            expected.add(entity.getId());
+        }
+        ResponseEntity<SampleEntity[]> response = restTemplate.getForEntity(
+                "http://localhost:{port}/api/sampleentity/",
+                SampleEntity[].class,
+                port);
+        Set<Long> actual = new HashSet<>();
+        for(SampleEntity entity : response.getBody()) {
+            actual.add(entity.getId());
+        }
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testEntity_getAllWithPagination() throws Exception {
+        Set<Long> expected = new HashSet<>();
+        for(int i=0; i<105; i++) {
+            SampleEntity entity = sampleEntityService.save(create(String.format("name%d", i), uuid(i)));
+            expected.add(entity.getId());
+        }
+        Set<Long> actual = new HashSet<>();
+        for(int i=0; i<11; i++) {
+            ResponseEntity<FakeSampleEntityPage> response =
+                    restTemplate.exchange(
+                            "http://localhost:{port}/api/sampleentity/{page}/{size}",
+                            HttpMethod.GET,
+                            null,
+                            FakeSampleEntityPage.class,
+                            port, i, 10);
+            for(SampleEntity entity : response.getBody().getContent()) {
+                actual.add(entity.getId());
+            }
+        }
+
+        assertEquals(expected, actual);
     }
 
     private SampleEntity create(String name, UUID uuid) {

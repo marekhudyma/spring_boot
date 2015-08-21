@@ -1,6 +1,8 @@
 package mh.springboot.dao;
 
 import mh.springboot.model.SampleEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,5 +15,7 @@ public interface SampleEntityService extends CrudRepository<SampleEntity, Long> 
 
     @Query("select se from SampleEntity se where se.name like %?1")
     List<SampleEntity> findByNameEndsWith(String name);
+
+    Page<SampleEntity> findAll(Pageable pageable);
 
 }
