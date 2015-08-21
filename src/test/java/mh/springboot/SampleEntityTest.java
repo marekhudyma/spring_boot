@@ -1,5 +1,6 @@
 package mh.springboot;
 
+import com.google.common.collect.ImmutableList;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import org.junit.After;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.UUID;
 
 import static junit.framework.Assert.assertEquals;
@@ -105,10 +107,11 @@ public class SampleEntityTest {
     public void testEntity_findById() throws Exception {
         SampleEntity sampleEntity = create("name", uuid(1));
         sampleEntityService.save(sampleEntity);
-        ResponseEntity<SampleEntity> response = restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/{id}",
-                                                                          SampleEntity.class,
-                                                                          port,
-                                                                          sampleEntity.getId());
+        ResponseEntity<SampleEntity> response = restTemplate.getForEntity(
+                "http://localhost:{port}/api/sampleentity/{id}",
+                SampleEntity.class,
+                port,
+                sampleEntity.getId());
         SampleEntity expected = sampleEntityService.findOne(sampleEntity.getId());
         SampleEntity actual = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -117,12 +120,34 @@ public class SampleEntityTest {
         assertNotNull(actual.getLastModified());
     }
 
+    @Test
+    public void testEntity_findByUuidIn() throws Exception {
+        sampleEntityService.save(create("name1", uuid(1)));
+        sampleEntityService.save(create("name2", uuid(2)));
+        sampleEntityService.save(create("name3", uuid(3)));
+
+        List<SampleEntity> results = sampleEntityService.findByUuidIn(ImmutableList.of(uuid(1), uuid(3)));
+        assertEquals(2, results.size());
+    }
+
+    @Test
+    public void testEntity_findByNameEndsWith() throws Exception {
+        sampleEntityService.save(create("name1", uuid(1)));
+        Long id = sampleEntityService.save(create("nameABC", uuid(2))).getId();
+        sampleEntityService.save(create("name3", uuid(3)));
+
+        List<SampleEntity> actual = sampleEntityService.findByNameEndsWith("ABC");
+        SampleEntity expected = create("nameABC", uuid(2));
+        expected.setId(id);
+        assertEquals(1, actual.size());
+        assertTrue(reflectionEquals(expected, actual.get(0), "created", "lastModified"));
+    }
+
     private SampleEntity create(String name, UUID uuid) {
         SampleEntity entity = new SampleEntity();
         entity.setName(name);
         entity.setUuid(uuid);
         return entity;
     }
-
 }
 
