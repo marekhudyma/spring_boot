@@ -11,7 +11,7 @@ import java.util.List;
  * class created because {@link org.springframework.data.domain.Page} cannot be deserialized.
  * @param <T>
  */
-public class FakePage<T> extends PageImpl<T> {
+public class PageAdapter<T> extends PageImpl<T> {
 
     private static final long serialVersionUID = 1L;
     private int number;
@@ -26,7 +26,7 @@ public class FakePage<T> extends PageImpl<T> {
     private List<T> content;
     private Sort sort;
 
-    public FakePage() {
+    public PageAdapter() {
         super(new ArrayList<T>());
     }
 

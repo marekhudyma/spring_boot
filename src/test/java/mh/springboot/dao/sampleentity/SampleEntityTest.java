@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import mh.springboot.SpringBootMainApplication;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
-import mh.springboot.utils.FakePage;
+import mh.springboot.utils.PageAdapter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class SampleEntityTest {
 
     private RestTemplate restTemplate;
 
-    static class FakeSampleEntityPage extends FakePage<SampleEntity> {};
+    static class SampleEntityPageAdapter extends PageAdapter<SampleEntity> {};
 
     @Before
     public void setUp() {
@@ -182,12 +182,12 @@ public class SampleEntityTest {
         }
         Set<Long> actual = new HashSet<>();
         for(int i=0; i<11; i++) {
-            ResponseEntity<FakeSampleEntityPage> response =
+            ResponseEntity<SampleEntityPageAdapter> response =
                     restTemplate.exchange(
                             "http://localhost:{port}/api/sampleentity/{page}/{size}",
                             HttpMethod.GET,
                             null,
-                            FakeSampleEntityPage.class,
+                            SampleEntityPageAdapter.class,
                             port, i, 10);
             for(SampleEntity entity : response.getBody().getContent()) {
                 actual.add(entity.getId());

@@ -1,5 +1,6 @@
 package mh.springboot.dao.sampleentity;
 
+import com.google.common.cache.GuavaCacheHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -20,7 +21,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static mh.springboot.utils.TestUuid.uuid;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
@@ -212,8 +212,11 @@ public class SampleEntityCacheDecoratorServiceTest {
         assertTrue(reflectionEquals(expected.get(id2), actual.get(id2), "created", "lastModified"));
     }
 
+    /**
+     * method get all items from cache from internal implementation
+     */
     private Map<Long, SampleEntity> getAllItemsFromCache(Cache cache) {
-        return (ConcurrentHashMap<Long, SampleEntity>)cache.getNativeCache();
+        return GuavaCacheHelper.getAllItemsFromCache(cache);
     }
 
     private void clean() {
