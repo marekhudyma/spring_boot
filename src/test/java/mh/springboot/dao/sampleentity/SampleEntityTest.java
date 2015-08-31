@@ -1,6 +1,7 @@
-package mh.springboot;
+package mh.springboot.dao.sampleentity;
 
 import com.google.common.collect.ImmutableList;
+import mh.springboot.SpringBootMainApplication;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import mh.springboot.utils.FakePage;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,9 @@ public class SampleEntityTest {
     @Autowired
     private SampleEntityService sampleEntityService;
 
+    @Autowired
+    private CacheManager cacheManager;
+
     @Value("${local.server.port}")
     private int port;
 
@@ -55,12 +60,12 @@ public class SampleEntityTest {
     public void setUp() {
         url = String.format("http://localhost:%s/api/sampleentity", port);
         restTemplate = new RestTemplate();
-        sampleEntityService.deleteAll();
+        clean();
     }
 
     @After
     public void tearDown() throws Exception {
-        sampleEntityService.deleteAll();
+        clean();
     }
 
     @Test
@@ -95,7 +100,7 @@ public class SampleEntityTest {
 
     @Test
     public void testEntity_delete() throws Exception {
-        SampleEntity sampleEntity =create("name", uuid(1));
+        SampleEntity sampleEntity = create("name", uuid(1));
         sampleEntityService.save(sampleEntity);
         ResponseEntity<?> response = restTemplate.exchange("http://localhost:{port}/api/sampleentity/{id}",
                                                            HttpMethod.DELETE,
@@ -198,5 +203,13 @@ public class SampleEntityTest {
         entity.setUuid(uuid);
         return entity;
     }
+
+    private void clean() {
+        sampleEntityService.deleteAll();
+        for(String cache : cacheManager.getCacheNames()) {
+            cacheManager.getCache(cache).clear();
+        }
+    }
+
 }
 

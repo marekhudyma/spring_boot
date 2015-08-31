@@ -1,6 +1,6 @@
-package mh.springboot;
+package mh.springboot.email;
 
-import mh.springboot.email.EmailSender;
+import mh.springboot.SpringBootMainApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

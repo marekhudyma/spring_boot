@@ -1,6 +1,9 @@
 package mh.springboot.dao;
 
 import mh.springboot.model.SampleEntity;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +14,9 @@ import java.util.UUID;
 
 public interface SampleEntityService extends CrudRepository<SampleEntity, Long> {
 
-    List<SampleEntity> findByUuidIn(List<UUID> uuid);
+    // custom methods
+
+    List<SampleEntity> findByUuidIn(List<UUID> uuids);
 
     @Query("select se from SampleEntity se where se.name like %?1")
     List<SampleEntity> findByNameEndsWith(String name);

@@ -3,6 +3,7 @@ package mh.springboot.controller;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SampleEntityController {
 
     @Autowired
-    SampleEntityService sampleEntityService;
+    @Qualifier("SampleEntityCachingDecoratorService")
+    private SampleEntityService sampleEntityService;
 
     @RequestMapping(method= RequestMethod.GET)
     public Iterable<SampleEntity> getAll() {

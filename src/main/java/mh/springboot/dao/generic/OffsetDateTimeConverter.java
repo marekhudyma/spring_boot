@@ -1,4 +1,4 @@
-package mh.springboot.dao;
+package mh.springboot.dao.generic;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

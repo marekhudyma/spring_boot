@@ -60,6 +60,13 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<!-- caching -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+
 		<!-- for LocalDateTime -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
@@ -83,6 +90,29 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- assertReflectionEquals -->
+		<dependency>
+			<groupId>org.unitils</groupId>
+			<artifactId>unitils</artifactId>
+			<version>2.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- for mocking -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- for mocking -->
+		<dependency>
+			<groupId>org.kubek2k</groupId>
+			<artifactId>springockito-annotations</artifactId>
+			<version>1.0.9</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
