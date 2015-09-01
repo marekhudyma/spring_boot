@@ -2,11 +2,14 @@ package mh.springboot.config;
 
 import com.google.common.cache.CacheBuilder;
 import mh.springboot.dao.SampleEntityCachingDecoratorService;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.guava.GuavaCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +36,11 @@ public class AppConfiguration {
     @Bean(name = "SampleEntityCachingDecoratorService")
     public SampleEntityCachingDecoratorService sampleEntityCachingDecoratorService() {
         return new SampleEntityCachingDecoratorService();
+    }
+
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+        return container -> container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404.html"));
     }
 
 }

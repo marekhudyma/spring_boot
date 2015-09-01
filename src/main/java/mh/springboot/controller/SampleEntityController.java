@@ -1,5 +1,8 @@
 package mh.springboot.controller;
 
+import mh.springboot.controller.error.ErrorCode;
+import mh.springboot.controller.exception.BadRequestException;
+import mh.springboot.controller.exception.ResourceNotFoundException;
 import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,14 @@ public class SampleEntityController {
 
     @RequestMapping(method=RequestMethod.GET, value="{id}")
     public SampleEntity getById(@PathVariable Long id) {
-        return sampleEntityService.findOne(id);
+        if(id < 1) {
+            throw new BadRequestException("invalid id", ErrorCode.BAD_REQUEST);
+        }
+        SampleEntity sampleEntity = sampleEntityService.findOne(id);
+        if(sampleEntity == null) {
+            throw new ResourceNotFoundException("entity does not exist", ErrorCode.NOT_FOUND);
+        }
+        return sampleEntity;
     }
 
     @RequestMapping(method=RequestMethod.POST)
@@ -47,7 +57,7 @@ public class SampleEntityController {
     @ResponseStatus(value= HttpStatus.OK)
     public SampleEntity update(@PathVariable long id, @RequestBody SampleEntity sampleEntity) {
         if(id != sampleEntity.getId()) {
-            throw new RuntimeException();
+            throw new BadRequestException("wrong id", ErrorCode.BAD_REQUEST);
         }
         return sampleEntityService.save(sampleEntity);
     }

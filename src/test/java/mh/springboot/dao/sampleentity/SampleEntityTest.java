@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
@@ -33,6 +35,7 @@ import static junit.framework.TestCase.assertNull;
 import static mh.springboot.utils.TestUuid.uuid;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -115,7 +118,7 @@ public class SampleEntityTest {
     }
 
     @Test
-    public void testEntity_findById() throws Exception {
+    public void testEntityfindById_correct() throws Exception {
         SampleEntity sampleEntity = create("name", uuid(1));
         sampleEntityService.save(sampleEntity);
         ResponseEntity<SampleEntity> response = restTemplate.getForEntity(
@@ -129,6 +132,54 @@ public class SampleEntityTest {
         assertTrue(reflectionEquals(expected, actual, "created", "lastModified"));
         assertNotNull(actual.getCreated());
         assertNotNull(actual.getLastModified());
+    }
+
+    @Test
+    public void testEntityfindById_badRequest() throws Exception {
+        try {
+           restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/-1",
+                                     String.class,
+                                     port);
+            fail();
+        }
+        catch (HttpClientErrorException ex) {
+            assertEquals(400, ex.getStatusCode().value());
+            String actual = ex.getResponseBodyAsString();
+            String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"INVALID_ID\",\"message\":\"invalid id\"}]}";
+            JSONAssert.assertEquals(expected, actual, false);
+        }
+    }
+
+    @Test
+    public void testEntityfindById_notFound() throws Exception {
+        try {
+            restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/9223372036854775807",
+                                      String.class,
+                                      port);
+            fail();
+        }
+        catch (HttpClientErrorException ex) {
+            assertEquals(404, ex.getStatusCode().value());
+            String actual = ex.getResponseBodyAsString();
+            String expected = "{\"httpCode\":404,\"errors\":[{\"code\":\"NOT_FOUND\",\"message\":\"entity does not exist\"}]}";
+            JSONAssert.assertEquals(expected, actual, false);
+        }
+    }
+
+    @Test
+    public void testEntityfindById_invalid() throws Exception {
+        try {
+            restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/abc",
+                                      String.class,
+                                      port);
+            fail();
+        }
+        catch (HttpClientErrorException ex) {
+            assertEquals(400, ex.getStatusCode().value());
+            String actual = ex.getResponseBodyAsString();
+            String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
+            JSONAssert.assertEquals(expected, actual, false);
+        }
     }
 
     @Test
@@ -196,6 +247,23 @@ public class SampleEntityTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testEntityfindById_notExistingPage() throws Exception {
+        try {
+            restTemplate.getForEntity("http://localhost:{port}/not_existing_page.html",
+                                      String.class,
+                                      port);
+            fail();
+        }
+        catch (HttpClientErrorException ex) {
+            assertEquals(404, ex.getStatusCode().value());
+            String actual = ex.getResponseBodyAsString();
+            assertTrue(actual.toLowerCase().contains("page not found"));
+        }
+    }
+
+
 
     private SampleEntity create(String name, UUID uuid) {
         SampleEntity entity = new SampleEntity();
