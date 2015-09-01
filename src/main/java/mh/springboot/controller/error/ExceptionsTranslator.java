@@ -56,13 +56,14 @@ public class ExceptionsTranslator {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorResponse handleError(Throwable t) {
-        logger.error("Internal Server Error[500]: ", t);
-        Error error = new Error(ErrorCode.INTERNAL_SERVER_ERROR, "Internal Server Error!");
+        logger.error("Internal Server Error", t);
+        Error error = new Error(ErrorCode.INTERNAL_SERVER_ERROR, "Internal Server Error");
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ImmutableList.of(error));
     }
 
     private ErrorResponse createErrorResponse(BaseException e, HttpStatus httpStatus) {
-        Error error = null;
+        logger.error("Error ", e);
+        Error error;
         if (e.getAttributes() == null) {
             error = new Error(e.getCode(), e.getMessage());
         } else {
