@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("application.properties")
+@PropertySource("application.properties") //TODO HUDYMA nie potrzeba
 @SuppressWarnings("unused")
 public class MailConfiguration {
 

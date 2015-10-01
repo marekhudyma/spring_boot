@@ -3,7 +3,7 @@ package mh.springboot.controller;
 import mh.springboot.controller.error.ErrorCode;
 import mh.springboot.controller.exception.BadRequestException;
 import mh.springboot.controller.exception.ResourceNotFoundException;
-import mh.springboot.dao.SampleEntityService;
+import mh.springboot.service.sampleentity.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

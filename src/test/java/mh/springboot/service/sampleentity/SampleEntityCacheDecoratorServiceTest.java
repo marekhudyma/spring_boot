@@ -1,12 +1,10 @@
-package mh.springboot.dao.sampleentity;
+package mh.springboot.service.sampleentity;
 
 import com.google.common.cache.GuavaCacheHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import mh.springboot.SpringBootMainApplication;
-import mh.springboot.dao.SampleEntityCachingDecoratorService;
-import mh.springboot.dao.SampleEntityService;
 import mh.springboot.model.SampleEntity;
 import mh.springboot.model.SampleEntityBuilder;
 import org.junit.After;

@@ -9,7 +9,7 @@
   <appender name="springBootAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${FILE_NAME}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>${FILE_NAME_CANDLER}.%d{yyyy-MM-dd}-%i.zip</fileNamePattern>
+      <fileNamePattern>${FILE_NAME}.%d{yyyy-MM-dd}-%i.zip</fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>100MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>

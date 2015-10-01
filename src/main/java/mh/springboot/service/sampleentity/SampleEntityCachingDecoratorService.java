@@ -1,4 +1,4 @@
-package mh.springboot.dao;
+package mh.springboot.service.sampleentity;
 
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SampleEntityCachingDecoratorService implements SampleEntityService 
     @Autowired
     private CacheManager cacheManager;
 
-    @Caching(evict = {@CacheEvict(value = FIND_ONE,  key = "#a0.id"),
+    @Caching(evict = {@CacheEvict(value = FIND_ONE,  key = "#a0.id"), //TODO HUDYMA entity.id
                       @CacheEvict(value = FIND_ALL, allEntries = true)})
     public <S extends SampleEntity> S save(S entity) {
         return sampleEntityService.save(entity);

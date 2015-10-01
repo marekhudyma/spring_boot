@@ -7,7 +7,8 @@ import java.util.Map;
 
 /**
  * gets all items from internal cache implementation
- * class is package protected, so it is dirty hack
+ * class {@link com.google.common.cache.LocalCache.LocalManualCache}
+ * is package protected, so it is dirty hack
  */
 public class GuavaCacheHelper {
 
