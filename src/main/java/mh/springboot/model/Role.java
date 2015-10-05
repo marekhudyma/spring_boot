@@ -1,17 +1,17 @@
 package mh.springboot.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 
 @Entity
-public class Role extends AbstractEntity implements GrantedAuthority {
+public class Role extends AbstractEntity { //implements GrantedAuthority { TODO HUDYMA - REMOVE SECURITY
 
     @NotEmpty
     private String authority;
 
-    @Override
+    //@Override
+    //TODO HUDYMA - REMOVE SECURITY
     public String getAuthority() {
         return authority;
     }

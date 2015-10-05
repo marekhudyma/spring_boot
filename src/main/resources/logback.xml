@@ -22,7 +22,7 @@
   </appender>
 
   <logger name="springBootLogger" level="INFO">
-    <appender-ref ref="imsAppender"/>
+    <appender-ref ref="springBootAppender"/>
   </logger>
 
   <root level="INFO">
