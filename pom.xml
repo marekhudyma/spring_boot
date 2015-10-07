@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.5.RELEASE</version>
+		<version>1.3.0.M5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -35,11 +35,47 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!--TODO HUDYMA - REMOVE SECURITY-->
+
+
+
+		<!--https://stackoverflow.com/questions/26325739/how-can-i-turn-off-spring-security-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+
 		<!--<dependency>-->
-			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<groupId>org.springframework.security</groupId>-->
 			<!--<artifactId>spring-boot-starter-security</artifactId>-->
 		<!--</dependency>-->
+
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.security</groupId>-->
+			<!--<artifactId>spring-security-config</artifactId>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.security</groupId>-->
+			<!--<artifactId>spring-security-web</artifactId>-->
+		<!--</dependency>-->
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<!--<version>4.0.2.RELEASE</version>-->
+		</dependency>
+
+
+
+
+
 
 		<!-- email -->
 		<dependency>
@@ -125,5 +161,49 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>repository.springframework.maven.release</id>
+			<name>Spring Framework Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+		</repository>
+
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>
