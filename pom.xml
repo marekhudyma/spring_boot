@@ -52,36 +52,11 @@
 
 
 
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.security</groupId>-->
-			<!--<artifactId>spring-boot-starter-security</artifactId>-->
-		<!--</dependency>-->
-
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.security</groupId>-->
-			<!--<artifactId>spring-security-config</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.security</groupId>-->
-			<!--<artifactId>spring-security-web</artifactId>-->
-		<!--</dependency>-->
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<!--<version>4.0.2.RELEASE</version>-->
-		</dependency>
 
 
 
 
 
-
-		<!-- email -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
 
 		<!-- caching + helpers -->
 		<dependency>
@@ -90,25 +65,7 @@
 			<version>18.0</version>
 		</dependency>
 
-		<!-- database -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4-1201-jdbc41</version>
-			<scope>runtime</scope>
-		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-
-		<!-- for LocalDateTime -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.4.0</version>
-		</dependency>
 
 		<!-- test dependencies -->
 
@@ -118,37 +75,8 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- assertReflectionEquals -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-			<scope>test</scope>
-		</dependency>
 
-		<!-- assertReflectionEquals -->
-		<dependency>
-			<groupId>org.unitils</groupId>
-			<artifactId>unitils</artifactId>
-			<version>2.2</version>
-			<scope>test</scope>
-		</dependency>
 
-		<!-- for mocking -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- json assert -->
-		<dependency>
-			<groupId>org.skyscreamer</groupId>
-			<artifactId>jsonassert</artifactId>
-			<version>1.2.3</version>
-			<scope>test</scope>
-		</dependency>
 
 	</dependencies>
 

@@ -1,6 +1,5 @@
-package mh.springboot.context;
+package mh.springboot;
 
-import mh.springboot.SpringBootMainApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
