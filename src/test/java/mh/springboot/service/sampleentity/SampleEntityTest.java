@@ -6,7 +6,6 @@ import mh.springboot.model.SampleEntity;
 import mh.springboot.utils.PageAdapter;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
@@ -40,20 +38,11 @@ import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-//@ContextConfiguration
-//@TestExecutionListeners(listeners = {WithSecurityContextTestExecutionListener.class})
-//@TestExecutionListeners(listeners = { ServletTestExecutionListener.class,
-//                                      DependencyInjectionTestExecutionListener.class,
-//                                      DirtiesContextTestExecutionListener.class,
-//                                      TransactionalTestExecutionListener.class,
-//                                      WithSecurityContextTestExecutionListener.class })
-
 @RunWith(SpringJUnit4ClassRunner.class)
-//@SpringApplicationConfiguration(classes = TestConfig.class)
 @SpringApplicationConfiguration(classes = SpringBootMainApplication.class)
 @WebAppConfiguration
-
 @IntegrationTest({"server.port=0"})
+@ActiveProfiles("test")
 public class SampleEntityTest {
 
     @Autowired
@@ -71,30 +60,11 @@ public class SampleEntityTest {
 
     static class SampleEntityPageAdapter extends PageAdapter<SampleEntity> {};
 
-    @Autowired
-    private ApplicationContext context;
-
-    @BeforeClass
-    public static void authenticate(){
-//        Authentication authentication =
-//                new UsernamePasswordAuthenticationToken("user", "password",
-//                                                        AuthorityUtils.createAuthorityList("USER", "ADMIN"));
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-    }
-
     @Before
     public void setUp() {
         url = String.format("http://localhost:%s/api/sampleentity", port);
         restTemplate = new RestTemplate();
         clean();
-
-//        AuthenticationManager authenticationManager = context.getBean(AuthenticationManager.class);
-//        Authentication authentication = authenticationManager
-//                .authenticate(new UsernamePasswordAuthenticationToken("user", "password", AuthorityUtils
-//                        .createAuthorityList("USER", "ADMIN")));
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @After
@@ -103,22 +73,6 @@ public class SampleEntityTest {
     }
 
     @Test
-    @WithMockUser(username="user",password = "password", roles={"USER","ADMIN"})
-    public void xxx() throws Exception {
-
-
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                "http://localhost:{port}/api/sampleentity/9223372036854775807",
-                String.class,
-                port);
-        System.out.println(response.toString());
-        fail();
-
-
-    }
-
-    @Test
-    @WithMockUser(username="user",password = "password", roles={"USER","ADMIN"})
     public void testEntity_create() throws Exception {
         SampleEntity sampleEntity = create("name", uuid(1));
         ResponseEntity<SampleEntity> response = restTemplate.postForEntity(url, sampleEntity, SampleEntity.class);
