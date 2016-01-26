@@ -1,29 +1,41 @@
 package mh.springboot.config;
 
 import com.google.common.cache.CacheBuilder;
-import mh.springboot.service.role.RoleCachingDecoratorService;
-import mh.springboot.service.sampleentity.SampleEntityCachingDecoratorService;
+import mh.springboot.repository.role.RoleCachingDecoratorRepository;
+import mh.springboot.repository.role.RoleRepository;
+import mh.springboot.repository.sampleentity.SampleEntityCachingDecoratorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.guava.GuavaCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
+@EnableCaching
+
 public class AppConfiguration {
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Bean
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
 
-        GuavaCache cacheOne = new GuavaCache(SampleEntityCachingDecoratorService.FIND_ONE,
+        GuavaCache cacheOne = new GuavaCache(SampleEntityCachingDecoratorRepository.FIND_ONE,
                                            CacheBuilder.newBuilder()
                                                        .expireAfterAccess(30, TimeUnit.MINUTES)
                                                        .build());
-        GuavaCache cacheAll = new GuavaCache(SampleEntityCachingDecoratorService.FIND_ALL,
+        GuavaCache cacheAll = new GuavaCache(SampleEntityCachingDecoratorRepository.FIND_ALL,
                                            CacheBuilder.newBuilder()
                                                        .expireAfterAccess(30, TimeUnit.MINUTES)
                                                        .build());
@@ -31,19 +43,26 @@ public class AppConfiguration {
         return cacheManager;
     }
 
-    @Bean(name = "RoleCachingDecoratorService")
-    public RoleCachingDecoratorService roleCachingDecoratorService() {
-        return new RoleCachingDecoratorService();
+    @Bean(name = "RoleCachingDecoratorRepository")
+    public RoleCachingDecoratorRepository roleCachingDecoratorService() {
+        return new RoleCachingDecoratorRepository(roleRepository);
     }
 
-    @Bean(name = "SampleEntityCachingDecoratorService")
-    public SampleEntityCachingDecoratorService sampleEntityCachingDecoratorService() {
-        return new SampleEntityCachingDecoratorService();
-    }
+    //add custom pages
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+        return new EmbeddedServletContainerCustomizer() {
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer container) {
 
-//    @Bean
-//    public EmbeddedServletContainerCustomizer containerCustomizer() {
-//        return container -> container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404.html"));
-//    }
+                //ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
+                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+                //ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+
+                //container.addErrorPages(error401Page, error404Page, error500Page);
+                container.addErrorPages(error404Page);
+            }
+        };
+    }
 
 }

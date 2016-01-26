@@ -1,4 +1,4 @@
-package mh.springboot.service.init;
+package mh.springboot.repository.init;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

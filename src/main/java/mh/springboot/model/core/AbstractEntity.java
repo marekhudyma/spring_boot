@@ -1,4 +1,4 @@
-package mh.springboot.model;
+package mh.springboot.model.core;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @MappedSuperclass
@@ -16,11 +17,11 @@ public abstract class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    //TODO HUDYMA - NOT NULL
+    @NotNull
     @Column
     protected OffsetDateTime created;
 
-    //TODO HUDYMA - NOT NULL
+    @NotNull
     @Column
     protected OffsetDateTime lastModified;
 

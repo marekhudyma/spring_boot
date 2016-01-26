@@ -1,4 +1,4 @@
-package mh.springboot.service.generic;
+package mh.springboot.repository.generic;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -9,6 +9,8 @@ import java.util.Date;
 
 @Converter(autoApply=true)
 @SuppressWarnings("unused")
+//JPA next should support Java 8 Date and Time types
+//https://java.net/jira/browse/JPA_SPEC-63
 public class OffsetDateTimeConverter implements AttributeConverter<OffsetDateTime, Date> {
 
     @Override
@@ -22,7 +24,7 @@ public class OffsetDateTimeConverter implements AttributeConverter<OffsetDateTim
     }
 
     @Override
-    public OffsetDateTime convertToEntityAttribute(Date date) {
+        public OffsetDateTime convertToEntityAttribute(Date date) {
         if (date != null) {
             Instant instant = date.toInstant();
             return instant.atOffset(ZoneOffset.UTC);

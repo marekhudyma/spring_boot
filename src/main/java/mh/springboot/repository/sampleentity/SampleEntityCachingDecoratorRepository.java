@@ -1,4 +1,4 @@
-package mh.springboot.service.sampleentity;
+package mh.springboot.repository.sampleentity;
 
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,21 +19,26 @@ import java.util.UUID;
  * using @CacheEvict in save(Iterable) and delete(Iterable)
  * https://stackoverflow.com/questions/32276418/spring-boot-cacheevict-saveiterables-entities
  */
-public class SampleEntityCachingDecoratorService implements SampleEntityService {
+@Component("SampleEntityCachingDecoratorRepository")
+public class SampleEntityCachingDecoratorRepository implements SampleEntityRepository {
 
     public static final String FIND_ONE = "findOne";
     public static final String FIND_ALL = "findAll";
 
-    @Autowired
-    private SampleEntityService sampleEntityService;
-
-    @Autowired
     private CacheManager cacheManager;
+    private SampleEntityRepository sampleEntityRepository;
 
-    @Caching(evict = {@CacheEvict(value = FIND_ONE,  key = "#a0.id"), //TODO HUDYMA entity.id
+    @Autowired
+    public SampleEntityCachingDecoratorRepository(CacheManager cacheManager,
+                                                  SampleEntityRepository sampleEntityRepository) {
+        this.cacheManager = cacheManager;
+        this.sampleEntityRepository = sampleEntityRepository;
+    }
+
+    @Caching(evict = {@CacheEvict(value = FIND_ONE,  key = "#entity.id"),
                       @CacheEvict(value = FIND_ALL, allEntries = true)})
     public <S extends SampleEntity> S save(S entity) {
-        return sampleEntityService.save(entity);
+        return sampleEntityRepository.save(entity);
     }
 
     /**
@@ -44,41 +50,41 @@ public class SampleEntityCachingDecoratorService implements SampleEntityService 
         }
         cacheManager.getCache(FIND_ALL).clear();
 
-        return sampleEntityService.save(entities);
+        return sampleEntityRepository.save(entities);
     }
 
     @Cacheable(key = "#a0", value = FIND_ONE)
     public SampleEntity findOne(Long id) {
-        return sampleEntityService.findOne(id);
+        return sampleEntityRepository.findOne(id);
     }
 
     public boolean exists(Long id) {
-        return sampleEntityService.exists(id);
+        return sampleEntityRepository.exists(id);
     }
 
     @Cacheable(value = FIND_ALL)
     public Iterable<SampleEntity> findAll() {
-        return sampleEntityService.findAll();
+        return sampleEntityRepository.findAll();
     }
 
     public Iterable<SampleEntity> findAll(Iterable<Long> ids) {
-        return sampleEntityService.findAll(ids);
+        return sampleEntityRepository.findAll(ids);
     }
 
     public long count() {
-        return sampleEntityService.count();
+        return sampleEntityRepository.count();
     }
 
     @Caching(evict = {@CacheEvict(value = FIND_ONE, key = "#a0"),
                       @CacheEvict(value = FIND_ALL, allEntries = true)})
     public void delete(Long id) {
-        sampleEntityService.delete(id);
+        sampleEntityRepository.delete(id);
     }
 
-    @Caching(evict = {@CacheEvict(value = FIND_ONE, key = "#p0.id"),
+    @Caching(evict = {@CacheEvict(value = FIND_ONE, key = "#entity.id"),
                       @CacheEvict(value = FIND_ALL, allEntries = true)})
     public void delete(SampleEntity entity) {
-        sampleEntityService.delete(entity);
+        sampleEntityRepository.delete(entity);
     }
 
     /**
@@ -90,27 +96,27 @@ public class SampleEntityCachingDecoratorService implements SampleEntityService 
         }
         cacheManager.getCache(FIND_ALL).clear();
 
-        sampleEntityService.delete(entities);
+        sampleEntityRepository.delete(entities);
     }
 
     @Caching(evict = {
             @CacheEvict(value = FIND_ONE, allEntries = true),
             @CacheEvict(value = FIND_ALL, allEntries = true)})
     public void deleteAll() {
-        sampleEntityService.deleteAll();
+        sampleEntityRepository.deleteAll();
     }
 
     // custom methods
 
     public List<SampleEntity> findByUuidIn(List<UUID> uuids) {
-        return sampleEntityService.findByUuidIn(uuids);
+        return sampleEntityRepository.findByUuidIn(uuids);
     }
 
     public List<SampleEntity> findByNameEndsWith(String name) {
-        return sampleEntityService.findByNameEndsWith(name);
+        return sampleEntityRepository.findByNameEndsWith(name);
     }
 
     public Page<SampleEntity> findAll(Pageable pageable) {
-        return sampleEntityService.findAll(pageable);
+        return sampleEntityRepository.findAll(pageable);
     }
 }

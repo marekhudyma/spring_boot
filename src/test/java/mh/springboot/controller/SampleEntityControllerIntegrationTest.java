@@ -1,12 +1,12 @@
-package mh.springboot.service.sampleentity;
+package mh.springboot.controller;
 
 import com.google.common.collect.ImmutableList;
 import mh.springboot.SpringBootMainApplication;
 import mh.springboot.model.SampleEntity;
+import mh.springboot.repository.sampleentity.SampleEntityRepository;
 import mh.springboot.utils.PageAdapter;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,19 +35,19 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static mh.springboot.utils.TestUuid.uuid;
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = SpringBootMainApplication.class)
 @WebAppConfiguration
 @IntegrationTest({"server.port=0"})
 @ActiveProfiles("test")
-public class SampleEntityTest {
+public class SampleEntityControllerIntegrationTest {
 
     @Autowired
-    private SampleEntityService sampleEntityService;
+    private SampleEntityRepository sampleEntityRepository;
 
     @Autowired
     private CacheManager cacheManager;
@@ -84,7 +85,7 @@ public class SampleEntityTest {
     @Test
     public void testEntity_update() throws Exception {
         SampleEntity entity = create("name", uuid(1));
-        entity = sampleEntityService.save(entity);
+        entity = sampleEntityRepository.save(entity);
         entity.setName("name2");
         ResponseEntity<?> response = restTemplate.exchange("http://localhost:{port}/api/sampleentity/{id}",
                                                            HttpMethod.PUT,
@@ -92,27 +93,25 @@ public class SampleEntityTest {
                                                            String.class,
                                                            port,
                                                            entity.getId());
-        SampleEntity actual = sampleEntityService.findOne(entity.getId());
+        SampleEntity actual = sampleEntityRepository.findOne(entity.getId());
         SampleEntity expected = create("name2", uuid(1));
         expected.setId(entity.getId());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(reflectionEquals(expected, actual, "created", "lastModified"));
-        assertNotNull(actual.getCreated());
-        assertNotNull(actual.getLastModified());
+        assertReflectionEquals(expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS);
     }
 
     @Test
     public void testEntity_delete() throws Exception {
         SampleEntity sampleEntity = create("name", uuid(1));
-        sampleEntityService.save(sampleEntity);
+        sampleEntityRepository.save(sampleEntity);
         ResponseEntity<?> response = restTemplate.exchange("http://localhost:{port}/api/sampleentity/{id}",
                                                            HttpMethod.DELETE,
                                                            new HttpEntity<>(sampleEntity),
                                                            String.class,
                                                            port,
                                                            sampleEntity.getId());
-        SampleEntity actual = sampleEntityService.findOne(sampleEntity.getId());
+        SampleEntity actual = sampleEntityRepository.findOne(sampleEntity.getId());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNull(actual);
@@ -121,18 +120,16 @@ public class SampleEntityTest {
     @Test
     public void testEntityfindById_correct() throws Exception {
         SampleEntity sampleEntity = create("name", uuid(1));
-        sampleEntityService.save(sampleEntity);
+        sampleEntityRepository.save(sampleEntity);
         ResponseEntity<SampleEntity> response = restTemplate.getForEntity(
                 "http://localhost:{port}/api/sampleentity/{id}",
                 SampleEntity.class,
                 port,
                 sampleEntity.getId());
-        SampleEntity expected = sampleEntityService.findOne(sampleEntity.getId());
+        SampleEntity expected = sampleEntityRepository.findOne(sampleEntity.getId());
         SampleEntity actual = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(reflectionEquals(expected, actual, "created", "lastModified"));
-        assertNotNull(actual.getCreated());
-        assertNotNull(actual.getLastModified());
+        assertReflectionEquals(expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS);
     }
 
     @Test
@@ -178,39 +175,39 @@ public class SampleEntityTest {
         catch (HttpClientErrorException ex) {
             assertEquals(400, ex.getStatusCode().value());
             String actual = ex.getResponseBodyAsString();
-            String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
+            String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type [java.lang.String] to required type [java.lang.Long]; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
             JSONAssert.assertEquals(expected, actual, false);
         }
     }
 
     @Test
     public void testEntity_findByUuidIn() throws Exception {
-        sampleEntityService.save(create("name1", uuid(1)));
-        sampleEntityService.save(create("name2", uuid(2)));
-        sampleEntityService.save(create("name3", uuid(3)));
+        sampleEntityRepository.save(create("name1", uuid(1)));
+        sampleEntityRepository.save(create("name2", uuid(2)));
+        sampleEntityRepository.save(create("name3", uuid(3)));
 
-        List<SampleEntity> results = sampleEntityService.findByUuidIn(ImmutableList.of(uuid(1), uuid(3)));
+        List<SampleEntity> results = sampleEntityRepository.findByUuidIn(ImmutableList.of(uuid(1), uuid(3)));
         assertEquals(2, results.size());
     }
 
     @Test
     public void testEntity_findByNameEndsWith() throws Exception {
-        sampleEntityService.save(create("name1", uuid(1)));
-        Long id = sampleEntityService.save(create("nameABC", uuid(2))).getId();
-        sampleEntityService.save(create("name3", uuid(3)));
+        sampleEntityRepository.save(create("name1", uuid(1)));
+        Long id = sampleEntityRepository.save(create("nameABC", uuid(2))).getId();
+        sampleEntityRepository.save(create("name3", uuid(3)));
 
-        List<SampleEntity> actual = sampleEntityService.findByNameEndsWith("ABC");
+        List<SampleEntity> actual = sampleEntityRepository.findByNameEndsWith("ABC");
         SampleEntity expected = create("nameABC", uuid(2));
         expected.setId(id);
         assertEquals(1, actual.size());
-        assertTrue(reflectionEquals(expected, actual.get(0), "created", "lastModified"));
+        assertReflectionEquals(expected, actual.get(0), ReflectionComparatorMode.IGNORE_DEFAULTS);
     }
 
     @Test
     public void testEntity_getAll() throws Exception {
         Set<Long> expected = new HashSet<>();
         for(int i=0; i<105; i++) {
-            SampleEntity entity = sampleEntityService.save(create(String.format("name%d", i), uuid(i)));
+            SampleEntity entity = sampleEntityRepository.save(create(String.format("name%d", i), uuid(i)));
             expected.add(entity.getId());
         }
         ResponseEntity<SampleEntity[]> response = restTemplate.getForEntity(
@@ -229,7 +226,7 @@ public class SampleEntityTest {
     public void testEntity_getAllWithPagination() throws Exception {
         Set<Long> expected = new HashSet<>();
         for(int i=0; i<105; i++) {
-            SampleEntity entity = sampleEntityService.save(create(String.format("name%d", i), uuid(i)));
+            SampleEntity entity = sampleEntityRepository.save(create(String.format("name%d", i), uuid(i)));
             expected.add(entity.getId());
         }
         Set<Long> actual = new HashSet<>();
@@ -249,7 +246,6 @@ public class SampleEntityTest {
         assertEquals(expected, actual);
     }
 
-    @Ignore("TODO HUDYMA FIX")
     @Test
     public void testEntityfindById_notExistingPage() throws Exception {
         try {
@@ -275,7 +271,7 @@ public class SampleEntityTest {
     }
 
     private void clean() {
-        sampleEntityService.deleteAll();
+        sampleEntityRepository.deleteAll();
         for(String cache : cacheManager.getCacheNames()) {
             cacheManager.getCache(cache).clear();
         }

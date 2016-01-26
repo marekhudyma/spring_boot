@@ -3,7 +3,7 @@ package mh.springboot.controller;
 import mh.springboot.controller.error.ErrorCode;
 import mh.springboot.controller.exception.BadRequestException;
 import mh.springboot.controller.exception.ResourceNotFoundException;
-import mh.springboot.service.sampleentity.SampleEntityService;
+import mh.springboot.repository.sampleentity.SampleEntityRepository;
 import mh.springboot.model.SampleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,17 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class SampleEntityController {
 
     @Autowired
-    @Qualifier("SampleEntityCachingDecoratorService")
-    private SampleEntityService sampleEntityService;
+    @Qualifier("SampleEntityCachingDecoratorRepository")
+    private SampleEntityRepository sampleEntityRepository;
 
     @RequestMapping(method= RequestMethod.GET)
     public Iterable<SampleEntity> getAll() {
-        return sampleEntityService.findAll();
+        return sampleEntityRepository.findAll();
     }
 
     @RequestMapping(method= RequestMethod.GET, value="{page}/{size}")
     public Page<SampleEntity> getAllPagination(@PathVariable Integer page, @PathVariable Integer size) {
-        return sampleEntityService.findAll(new PageRequest(page, size));
+        return sampleEntityRepository.findAll(new PageRequest(page, size));
     }
 
     @RequestMapping(method=RequestMethod.GET, value="{id}")
@@ -40,7 +40,7 @@ public class SampleEntityController {
         if(id < 1) {
             throw new BadRequestException("invalid id", ErrorCode.BAD_REQUEST);
         }
-        SampleEntity sampleEntity = sampleEntityService.findOne(id);
+        SampleEntity sampleEntity = sampleEntityRepository.findOne(id);
         if(sampleEntity == null) {
             throw new ResourceNotFoundException("entity does not exist", ErrorCode.NOT_FOUND);
         }
@@ -50,7 +50,7 @@ public class SampleEntityController {
     @RequestMapping(method=RequestMethod.POST)
     @ResponseStatus(value= HttpStatus.CREATED)
     public SampleEntity create(@RequestBody SampleEntity sampleEntity) {
-        return sampleEntityService.save(sampleEntity);
+        return sampleEntityRepository.save(sampleEntity);
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="{id}")
@@ -59,13 +59,13 @@ public class SampleEntityController {
         if(id != sampleEntity.getId()) {
             throw new BadRequestException("wrong id", ErrorCode.BAD_REQUEST);
         }
-        return sampleEntityService.save(sampleEntity);
+        return sampleEntityRepository.save(sampleEntity);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable Long id) {
-        sampleEntityService.delete(id);
+        sampleEntityRepository.delete(id);
     }
 
 }

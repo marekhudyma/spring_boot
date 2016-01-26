@@ -1,4 +1,4 @@
-package mh.springboot.service.generic;
+package mh.springboot.repository.generic;
 
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;

@@ -7,10 +7,10 @@ DROP TABLE IF EXISTS SAMPLE_ENTITY;
 CREATE TABLE USER_ACCOUNT
 (
   id serial PRIMARY KEY,
-  created timestamp with time zone,        --TODO HUDYMA - NOT NULL
-  last_modified timestamp with time zone,  --TODO HUDYMA - NOT NULL
+  created timestamp with time zone NOT NULL,
+  last_modified timestamp with time zone NOT NULL,
   name text NOT NULL,
-  login text NOT NULL,
+  login text UNIQUE NOT NULL,
   password text NOT NULL
 ) WITH (OIDS=FALSE);
 ALTER TABLE USER_ACCOUNT OWNER TO postgres;
@@ -23,8 +23,8 @@ CREATE TABLE ROLE
   authority character varying(255) NOT NULL
 ) WITH (OIDS=FALSE);
 ALTER TABLE ROLE OWNER TO postgres;
-INSERT INTO ROLE(id, created, last_modified, authority) VALUES (1, NOW(), NOW(), 'USER');
-INSERT INTO ROLE(id, created, last_modified, authority) VALUES (2, NOW(), NOW(), 'ADMIN');
+INSERT INTO ROLE(id, created, last_modified, authority) VALUES (1, NOW(), NOW(), 'ROLE_USER'); --IT NEEDS TO BE "ROLE_"
+INSERT INTO ROLE(id, created, last_modified, authority) VALUES (2, NOW(), NOW(), 'ROLE_ADMIN');
 
 CREATE TABLE USER_ROLE
 (
@@ -48,8 +48,12 @@ WITH (OIDS=FALSE);
 ALTER TABLE SAMPLE_ENTITY OWNER TO postgres;
 
 ----
-INSERT INTO user_account(name, login, password) VALUES ('marek', 'user', 'password');
+INSERT INTO user_account(id, created, last_modified, name, login, password) VALUES (1, now(), now(), 'marekUser', 'user', 'u');
+INSERT INTO user_role(id, user_id, role_id) VALUES (1, 1, 1);
 
+INSERT INTO user_account(id, created, last_modified, name, login, password) VALUES (2, now(), now(), 'marekAdmin', 'admin', 'a');
+INSERT INTO user_role(id, user_id, role_id) VALUES (2, 2, 1);
+INSERT INTO user_role(id, user_id, role_id) VALUES (3, 2, 2);
 
 
 

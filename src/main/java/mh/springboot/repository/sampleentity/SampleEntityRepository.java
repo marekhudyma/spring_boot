@@ -1,4 +1,4 @@
-package mh.springboot.service.sampleentity;
+package mh.springboot.repository.sampleentity;
 
 import mh.springboot.model.SampleEntity;
 import org.springframework.data.domain.Page;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface SampleEntityService extends CrudRepository<SampleEntity, Long> {
+public interface SampleEntityRepository extends CrudRepository<SampleEntity, Long> {
 
     // custom methods
 

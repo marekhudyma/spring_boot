@@ -1,6 +1,8 @@
-package mh.springboot.model;
+package mh.springboot.model.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.ImmutableSet;
+import mh.springboot.model.core.AbstractEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,25 @@ import java.util.Set;
 @Entity
 @Table(name="USER_ACCOUNT")
 public class User extends AbstractEntity implements UserDetails {
+
+    public User() {
+    }
+
+    public User(final String login,
+                final String password,
+                final String name) {
+        this(login, password, name, ImmutableSet.of());
+    }
+
+    public User(final String login,
+                final String password,
+                final String name,
+                final Set<Role> roles) {
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.roles = roles;
+    }
 
     @NotEmpty
     private String name;

@@ -1,5 +1,7 @@
 package mh.springboot.config;
 
+import mh.springboot.repository.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -12,18 +14,30 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @EnableWebSecurity
 @Import(SecurityAutoConfiguration.class)
-@Profile("!test")
+@Profile("!test") //it would be skipped for profile "test"
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+        auth.userDetailsService(userRepository);
     }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/api/sampleentity").authenticated().and().authorizeRequests()
+            .antMatchers("/api/sampleentity").authenticated()
+
+            .antMatchers("/page_user.html").hasRole("USER")
+            .antMatchers("/page_admin.html").hasRole("ADMIN")
+
             .and().formLogin().permitAll()
             .and().logout().permitAll().logoutUrl("/logout")
             .logoutSuccessUrl("/");
@@ -35,4 +49,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+//    @Override
+//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .userDetailsService(userDetailsService)
+//                .passwordEncoder(new BCryptPasswordEncoder());
+//    }
 }

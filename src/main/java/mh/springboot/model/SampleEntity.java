@@ -1,5 +1,6 @@
 package mh.springboot.model;
 
+import mh.springboot.model.core.AbstractEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
