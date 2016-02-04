@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -22,8 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import java.util.HashSet;
@@ -36,7 +35,6 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static mh.springboot.utils.TestUuid.uuid;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -57,14 +55,14 @@ public class SampleEntityControllerIntegrationTest {
 
     private String url;
 
-    private RestTemplate restTemplate;
+    private TestRestTemplate restTemplate;
 
     static class SampleEntityPageAdapter extends PageAdapter<SampleEntity> {};
 
     @Before
     public void setUp() {
         url = String.format("http://localhost:%s/api/sampleentity", port);
-        restTemplate = new RestTemplate();
+        restTemplate = new TestRestTemplate();
         clean();
     }
 
@@ -134,50 +132,38 @@ public class SampleEntityControllerIntegrationTest {
 
     @Test
     public void testEntityfindById_badRequest() throws Exception {
-        try {
-           restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/-1",
-                                     String.class,
-                                     port);
-            fail();
-        }
-        catch (HttpClientErrorException ex) {
-            assertEquals(400, ex.getStatusCode().value());
-            String actual = ex.getResponseBodyAsString();
-            String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"BAD_REQUEST\",\"message\":\"invalid id\"}]}";
-            JSONAssert.assertEquals(expected, actual, false);
-        }
+        ResponseEntity<?> response = restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/-1",
+                                                               String.class,
+                                                               port);
+        String actual = response.getBody().toString();
+        String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"BAD_REQUEST\",\"message\":\"invalid id\"}]}";
+
+        assertEquals(400, response.getStatusCode().value());
+        JSONAssert.assertEquals(expected, actual, false);
     }
 
     @Test
     public void testEntityfindById_notFound() throws Exception {
-        try {
-            restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/9223372036854775807",
+        ResponseEntity<?> response = restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/9223372036854775807",
                                       String.class,
                                       port);
-            fail();
-        }
-        catch (HttpClientErrorException ex) {
-            assertEquals(404, ex.getStatusCode().value());
-            String actual = ex.getResponseBodyAsString();
-            String expected = "{\"httpCode\":404,\"errors\":[{\"code\":\"NOT_FOUND\",\"message\":\"entity does not exist\"}]}";
-            JSONAssert.assertEquals(expected, actual, false);
-        }
+        String actual = response.getBody().toString();
+        String expected = "{\"httpCode\":404,\"errors\":[{\"code\":\"NOT_FOUND\",\"message\":\"entity does not exist\"}]}";
+
+        assertEquals(404, response.getStatusCode().value());
+        JSONAssert.assertEquals(expected, actual, false);
     }
 
     @Test
     public void testEntityfindById_invalid() throws Exception {
-        try {
-            restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/abc",
+        ResponseEntity<?> response = restTemplate.getForEntity("http://localhost:{port}/api/sampleentity/abc",
                                       String.class,
                                       port);
-            fail();
-        }
-        catch (HttpClientErrorException ex) {
-            assertEquals(400, ex.getStatusCode().value());
-            String actual = ex.getResponseBodyAsString();
-            String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type [java.lang.String] to required type [java.lang.Long]; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
-            JSONAssert.assertEquals(expected, actual, false);
-        }
+        String actual = response.getBody().toString();
+        String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type [java.lang.String] to required type [java.lang.Long]; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
+
+        assertEquals(400, response.getStatusCode().value());
+        JSONAssert.assertEquals(expected, actual, false);
     }
 
     @Test
@@ -248,20 +234,14 @@ public class SampleEntityControllerIntegrationTest {
 
     @Test
     public void testEntityfindById_notExistingPage() throws Exception {
-        try {
-            restTemplate.getForEntity("http://localhost:{port}/not_existing_page.html",
+        ResponseEntity<?> response =  restTemplate.getForEntity("http://localhost:{port}/not_existing_page.html",
                                       String.class,
                                       port);
-            fail();
-        }
-        catch (HttpClientErrorException ex) {
-            assertEquals(404, ex.getStatusCode().value());
-            String actual = ex.getResponseBodyAsString();
-            assertTrue(actual.toLowerCase().contains("page not found"));
-        }
+        String actual = response.getBody().toString();
+
+        assertEquals(404, response.getStatusCode().value());
+        assertTrue(actual.toLowerCase().contains("page not found"));
     }
-
-
 
     private SampleEntity create(String name, UUID uuid) {
         SampleEntity entity = new SampleEntity();

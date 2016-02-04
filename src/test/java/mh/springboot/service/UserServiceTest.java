@@ -28,7 +28,6 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-
     @Before
     public void setUp() {
         clean();
