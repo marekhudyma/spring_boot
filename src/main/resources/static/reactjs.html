@@ -10,16 +10,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="aaa"> </div>
+
+<div id="application"> </div>
 
 <div id="content"></div>
 <script type="text/babel">
     var App = React.createClass({
         render: function () {
-            return <h1>Hello ReactJS</h1>
+            return <div>
+                    <div>Hello</div>
+                    <b>React</b>
+                   </div>
         }
     });
-    ReactDOM.render(<App />, document.getElementById("aaa"));
+    ReactDOM.render(<App />, document.getElementById("application"));
 </script>
 </body>
 </html>
