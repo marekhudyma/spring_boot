@@ -21,11 +21,9 @@
 <br />
 <br />Default users:
 <br />-login: "admin",
-<br />password: "a" (
-<br />RoleEnum.ADMIN, RoleEnum.USER,
+<br />password: "a", RoleEnum.ADMIN, RoleEnum.USER,
 <br />-login: "user"
-<br />password: "u",
-<br />RoleEnum.USER
+<br />password: "u", RoleEnum.USER
 <br />
 <br />TO RETHINK:
 <br />-in AbstractEntity added fields: OffsetDateTime (still waiting for JPA 2.2, JPA1 doesn't support it, it is better to use JodaTime)
