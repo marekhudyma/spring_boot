@@ -25,6 +25,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userRepository);
     }
 
+//to use in-memory-db
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
@@ -50,6 +51,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+//TODO add hash of password
 //    @Override
 //    public void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth

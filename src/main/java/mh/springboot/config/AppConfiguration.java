@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
-
 public class AppConfiguration {
 
     @Autowired
@@ -48,7 +47,7 @@ public class AppConfiguration {
         return new RoleCachingDecoratorRepository(roleRepository);
     }
 
-    //add custom pages
+    //add custom error pages
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return new EmbeddedServletContainerCustomizer() {

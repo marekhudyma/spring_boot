@@ -30,7 +30,7 @@ public class RoleCachingDecoratorRepository {
     public Role getRole(RoleEnum roleEnum) {
         Role role = findAll().get(roleEnum.getId());
         if(role == null) {
-            throw new IllegalStateException("The role %s was ");
+            throw new IllegalStateException("Roles not found");
         }
         return role;
     }
