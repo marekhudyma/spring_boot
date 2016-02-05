@@ -32,13 +32,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+            .csrf().disable() //TODO CHANGE IT !!!
+            .authorizeRequests()
             .antMatchers("/api/sampleentity").authenticated()
 
             .antMatchers("/page_user.html").hasRole("USER")
             .antMatchers("/page_admin.html").hasRole("ADMIN")
-
-            .and().formLogin().permitAll()
+            .and().formLogin().loginPage("/custom_login.html").permitAll()
             .and().logout().permitAll().logoutUrl("/logout")
             .logoutSuccessUrl("/");
     }

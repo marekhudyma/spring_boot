@@ -38,7 +38,7 @@ public class SecurityTest {
         HttpClient.Result result = httpClient.execute();
 
         assertEquals(200, result.getResponseCode());
-        assertTrue(result.getHtml().contains("Login Page"));
+        assertTrue(result.getHtml().contains("Custom Login Page"));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SecurityTest {
         HttpClient.Result result = httpClient.execute();
 
         assertEquals(200, result.getResponseCode());
-        assertTrue(result.getHtml().contains("Login Page"));
+        assertTrue(result.getHtml().contains("Custom Login Page"));
     }
 
     @Test
