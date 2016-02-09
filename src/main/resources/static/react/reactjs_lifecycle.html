@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>React Tutorial</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<button onClick="render()">Render</button>
+<button onClick="unmount()">Render</button>
+<hr />
+<div id="content"></div>
+
+<script type="text/babel">
+    var App = React.createClass({
+        update: function () {
+            var newVal = this.props.val+1;
+            this.setProps({val:newVal}) ////?????
+            //this.val = newVal;
+        },
+        componentWillMount:function() {
+            console.log("componentWillMount")
+        },
+        render: function() {
+            console.log("render")
+            return <button onClick={this.update}>{this.props.val}</button>  //?????
+        },
+        componentDidMount:function() {
+            console.log("componentDidMount")
+        },
+        componentWillUnmount:function() {
+            console.log("componentWillUnmount")
+        }
+    });
+
+    window.render = function() {
+        ReactDOM.render(
+            <App val={0} />,
+            document.getElementById("content")
+        )
+    }
+
+    window.unmount = function() {
+        ReactDOM.unmountComponentAtNode(document.getElementById("content"))
+    }
+
+    //ReactDOM.render(<App val={0} />, document.getElementById("content"));
+</script>
+</body>
+</html>

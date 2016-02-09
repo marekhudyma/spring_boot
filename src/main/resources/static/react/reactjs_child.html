@@ -14,27 +14,21 @@
 
 <script type="text/babel">
     var App = React.createClass({
-        getDefaultProps: function() {
-            return {
-                txt: 'default text',
-                num: 25
-            }
-        },
-        propTypes: {
-            txt: React.PropTypes.string,
-            num: React.PropTypes.number
-        },
         render: function () {
-            var txt = this.props.txt;
-            var num = this.props.num;
-            return <div>
-                    <span>Hello </span>
-                    <b>{txt}</b>
-                    <b> {num}</b>
-                   </div>
+            return (
+                 <Button>React</Button>
+            );
         }
     });
-    ReactDOM.render(<App txt="React" />, document.getElementById("content"));
+
+    var Button = React.createClass({
+        render: function () {
+            return (
+                    <button>{this.props.children}</button>
+            );
+        }
+    });
+    ReactDOM.render(<App />, document.getElementById("content"));
 </script>
 </body>
 </html>
