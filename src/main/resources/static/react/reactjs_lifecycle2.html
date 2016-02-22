@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>React Tutorial</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="content"></div>
+
+<script type="text/babel">
+    var App = React.createClass({
+        getInitialState:function() {
+            this.setProps({val:0})
+            return {increasing:false}
+        },
+        getDefaultProps: function() {
+            return {
+                val: 3
+            }
+        },
+        shouldComponentUpdate: function(nextProps, nextState) {
+            return nextProps.val % 5 === 0;
+        },
+        componentWillUpdate: function(nextProps, nextState) {
+            console.log("NextProps ===" + JSON.stringify(nextProps));
+        },
+
+        update: function () {
+            var newVal = this.props.val+1;
+            //this.props.val = newVal; ??? doesn't work
+            this.setProps({val:newVal}) //warning !!!
+        },
+        componentWillMount:function() {
+            console.log("componentWillMount")
+        },
+        componentDidUpdate: function(prevProps, prevState) {
+            console.log("prevProps ===" + JSON.stringify(prevProps));
+        },
+        render: function() {
+            console.log("render")
+            return <button onClick={this.update}>{this.props.val}</button>
+        }
+    });
+
+    ReactDOM.render(<App />, document.getElementById("content"));
+</script>
+</body>
+</html>
