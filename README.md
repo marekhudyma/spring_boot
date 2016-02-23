@@ -15,7 +15,7 @@
 <br />HOW TO RUN:
 <br />-in database execute /src/sql/tables.sql script.
 <br />-from consone: "mvn clean install"
-<br />-java -jar target/mh.springboot-1.0.0-SNAPSHOT.jar
+<br />-java -jar target/mh.springboot-1.0.0-SNAPSHOT.jar --server.port=8080
 <br />-run from Intellij (add "Spring Boot" application),
 <br />[to reload page without restarting application on Mac press: cmd-shift f9]
 <br />
