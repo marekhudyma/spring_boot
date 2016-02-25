@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>React Tutorial</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="content"></div>
+
+<script type="text/babel">
+
+    var Row = React.createClass({
+        render: function () {
+            return <div>{this.props.item.name} {this.props.item.url}</div>
+        },
+        aaa: function() {
+            alert('aaa');
+            //component.props // #=> {Object...}
+        }
+    });
+
+    var App = React.createClass({
+        getInitialState: function() {
+            return {
+                    items: [
+                    {id: 1, name: "Groupon stocks",  url: "https://finance.yahoo.com/q?s=GRPN"},
+                    {id: 2, name: "Gold price", url: "https://philoro.de/shop/goldbarren/goldbarren-100g-heraeus"}
+                    ]
+            }
+        },
+        aaa: function() {
+            alert('aaa');
+            //component.props // #=> {Object...}
+        },
+        render: function () {
+            var items = this.state.items.map(
+                    function(item) {
+                        return (<Row onClick={this.aaa} item={item} key={item.id} />);
+                    }
+            );
+            return (<div>
+                    {items}
+                    </div>);
+        }
+
+    });
+
+    ReactDOM.render(<App txt="React" />, document.getElementById("content"));
+</script>
+</body>
+</html>
