@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>React Tutorial</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="content"></div>
+
+<script type="text/babel">
+    //TODO FIX - it doesn't work !!!
+    var App = React.createClass({
+        render: function () {
+            return (
+                <div>
+                    <NumInput
+                        min={0}
+                        max={255}
+                        val={23}
+                        step={1}
+                    />
+                </div>
+            );
+        }
+    });
+
+    var NumInput = React.createClass({
+        propTypes: {
+            min:React.PropTypes.number,
+            max:React.PropTypes.number,
+            step:React.PropTypes.number,
+            val:React.PropTypes.number,
+            type:React.PropTypes.oneOf(['number', 'range'])
+        },
+        getDefaultProps:function() {
+            return {
+                min: null,
+                max: null,
+                step: 1,
+                val: 0,
+                type: 'range'
+            }
+        },
+        update: function() {
+            var newVal = this.props.val+1;
+            //this.props.val = newVal; ??? doesn't work
+            this.setProps({val:newVal}) //warning !!!
+        },
+        render: function () {
+            return (
+                <div>
+                    <input
+                        min={this.props.min}
+                        max={this.props.max}
+                        step={this.props.step}
+                        type={this.props.type}
+                        defaultValue={this.props.val}
+                        onChange={this.props.update} />
+                    <label>{this.props.val}</label>
+                </div>
+            );
+        }
+    });
+
+
+
+    ReactDOM.render(<App />, document.getElementById("content"));
+</script>
+</body>
+</html>
