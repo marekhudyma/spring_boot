@@ -13,10 +13,10 @@
 <div id="content"></div>
 
 <script type="text/babel">
-
+//https://facebook.github.io/react/tips/expose-component-functions.html
     var Row = React.createClass({
         render: function () {
-            return <div>{this.props.item.name} {this.props.item.url}</div>
+            return <div onClick={this.props.onClick}>  {this.props.item.name}   {this.props.item.url}</div>
         },
         aaa: function() {
             alert('aaa');
@@ -33,15 +33,15 @@
                     ]
             }
         },
-        aaa: function() {
+        handleClick: function(index) {
             alert('aaa');
-            //component.props // #=> {Object...}
         },
         render: function () {
             var items = this.state.items.map(
-                    function(item) {
-                        return (<Row onClick={this.aaa} item={item} key={item.id} />);
-                    }
+                function(item) {
+                    var boundClick = this.handleClick.bind(this, item.id);
+                    return (<Row onClick={boundClick} item={item} key={item.id} />);
+                }
             );
             return (<div>
                     {items}
