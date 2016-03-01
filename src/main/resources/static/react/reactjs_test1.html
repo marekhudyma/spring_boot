@@ -17,10 +17,6 @@
     var Row = React.createClass({
         render: function () {
             return <div onClick={this.props.onClick}>  {this.props.item.name}   {this.props.item.url}</div>
-        },
-        aaa: function() {
-            alert('aaa');
-            //component.props // #=> {Object...}
         }
     });
 
@@ -36,17 +32,20 @@
         handleClick: function(index) {
             alert('aaa');
         },
-        render: function () {
-            var items = this.state.items.map(
-                function(item) {
-                    var boundClick = this.handleClick.bind(this, item.id);
-                    return (<Row onClick={boundClick} item={item} key={item.id} />);
-                }
-            );
-            return (<div>
-                    {items}
-                    </div>);
+        render: function() {
+            return (
+                    <div>
+                        {
+                            this.state.items.map(function(item, i) {
+                            var boundClick = this.handleClick.bind(this, i);
+                            return (
+                                    <Row onClick={boundClick} item={item} key={item.id} />
+                            );
+                        }, this)}
+                    </div>
+                    );
         }
+
 
     });
 
