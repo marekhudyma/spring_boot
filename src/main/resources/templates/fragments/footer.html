@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <div th:fragment="footer(messageBefore, messageAfter)">
+        <p>
+            <div th:text="${messageBefore}"></div>
+            <div>Footer</div>
+            <div th:text="${messageAfter}"></div>
+        </p>
+    </div>
+</body>
+</html>
