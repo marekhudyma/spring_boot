@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 @Import(SecurityAutoConfiguration.class)
@@ -41,8 +42,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/page_user.html").hasRole("USER")
             .antMatchers("/page_admin.html").hasRole("ADMIN")
             .and().formLogin().loginPage("/custom_login.html").permitAll()
-            .and().logout().permitAll().logoutUrl("/logout")
-            .logoutSuccessUrl("/");
+            .and().logout()
+                .permitAll()
+                .deleteCookies("remove")
+                .invalidateHttpSession(true)
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+
     }
 
     @Override

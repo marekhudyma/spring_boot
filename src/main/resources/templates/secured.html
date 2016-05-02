@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Secured Content</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+</head>
+<body>
+
+    <div class="container" style="height: 100vh;">
+        <div class="row" >
+            <div class="col-md-12">
+                <h1>Spring Security Demo</h1>
+            </div>
+        </div>
+
+        <div class="row" sec:authorize="isAuthenticated()">
+            <div class="col-md-10 col-md-offset-2">
+                <h2 style="color:green">User is Logged In</h2>
+                <p sec:authentication="principal.username">userName</p>
+            </div>
+        </div>
+
+        <div class="row" sec:authorize="!isAuthenticated()">
+            <div class="col-md-10 col-md-offset-2">
+                <h2 style="color:red">User is Logged Out</h2>
+            </div>
+        </div>
+
+        <div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="col-md-10 col-md-offset-2">
+                <h2>User Has Role Admin</h2>
+            </div>
+        </div>
+
+        <div class="row" sec:authorize="hasRole('ROLE_USER')">
+            <div class="col-md-10 col-md-offset-2">
+                <h2>User Has Role User</h2>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
