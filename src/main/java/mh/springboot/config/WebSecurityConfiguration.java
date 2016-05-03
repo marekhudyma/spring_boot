@@ -3,6 +3,7 @@ package mh.springboot.config;
 import mh.springboot.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Import(SecurityAutoConfiguration.class)
 @Profile("!test") //it would be skipped for profile "test"
+@EnableOAuth2Sso
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired

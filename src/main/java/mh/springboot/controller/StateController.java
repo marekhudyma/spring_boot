@@ -18,6 +18,8 @@ public class StateController {
 
     private int i;
 
+    //TODO HUDYMA - check it
+    //    public Principal user(Principal principal) {
     @RequestMapping(method= RequestMethod.GET)
     public Result state() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

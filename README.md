@@ -39,3 +39,7 @@
 <br />BRANCHES:
 <br />-master - current development
 <br />-single_page - serve simple html page.
+<br />
+<br />interesting links:
+<br />https://spring.io/guides/tutorials/spring-boot-oauth2/#_social_login_simple
+
