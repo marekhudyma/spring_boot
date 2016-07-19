@@ -1,0 +1,61 @@
+#create app: https://developers.facebook.com/apps
+facebook:
+  client:
+    clientId: XXXXXX
+    clientSecret: XXXXXX
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://graph.facebook.com/me
+
+#create app: https://console.developers.google.com/apis/library
+google:
+  client:
+    clientId: XXXXXX
+    clientSecret: XXXXXX
+    accessTokenUri: https://www.googleapis.com/oauth2/v3/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+    tokenName: code
+    redirectUri: http://localhost:8080
+    scope:  https://www.googleapis.com/auth/plus.login,https://www.googleapis.com/auth/plus.me
+  resource:
+    userInfoUri: https://www.googleapis.com/oauth2/v2/userinfo
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    logging.level.org.hibernate: DEBUG
+
+spring:
+    datasource:
+      driverClassName: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5432/spring_boot
+      username: postgres 
+      password: postgres
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: true
+    resources:
+    chain:
+      enabled: true
+
+#email properties
+mail.protocol: smtp
+mail.host: poczta.o2.pl
+mail.port: 465
+mail.smtp.auth: true
+mail.smtp.starttls.enable: true
+mail.from: spring.boot@o2.pl
+mail.username: spring.boot
+mail.password: springboot
+
+#logging.level.org.springframework.web=ERROR
+#logging.level.org.hibernate=ERROR
+
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate=DEBUG
