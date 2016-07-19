@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS USER_ROLE;
 DROP TABLE IF EXISTS USER_ACCOUNT;
 DROP TABLE IF EXISTS ROLE;
@@ -7,11 +6,12 @@ DROP TABLE IF EXISTS SAMPLE_ENTITY;
 CREATE TABLE USER_ACCOUNT
 (
   id serial PRIMARY KEY,
+  external_id text,
   created timestamp with time zone NOT NULL,
   last_modified timestamp with time zone NOT NULL,
-  name text NOT NULL,
-  login text UNIQUE NOT NULL,
-  password text NOT NULL
+  name text,
+  login text UNIQUE,
+  password text
 ) WITH (OIDS=FALSE);
 ALTER TABLE USER_ACCOUNT OWNER TO postgres;
 
@@ -48,10 +48,10 @@ WITH (OIDS=FALSE);
 ALTER TABLE SAMPLE_ENTITY OWNER TO postgres;
 
 ----
-INSERT INTO user_account(id, created, last_modified, name, login, password) VALUES (1, now(), now(), 'marekUser', 'user', 'u');
+INSERT INTO user_account(id, external_id, created, last_modified, name, login, password) VALUES (1, null, now(), now(), 'marekUser', 'user', 'u');
 INSERT INTO user_role(id, user_id, role_id) VALUES (1, 1, 1);
 
-INSERT INTO user_account(id, created, last_modified, name, login, password) VALUES (2, now(), now(), 'marekAdmin', 'admin', 'a');
+INSERT INTO user_account(id, external_id, created, last_modified, name, login, password) VALUES (2, null, now(), now(), 'marekAdmin', 'admin', 'a');
 INSERT INTO user_role(id, user_id, role_id) VALUES (2, 2, 1);
 INSERT INTO user_role(id, user_id, role_id) VALUES (3, 2, 2);
 

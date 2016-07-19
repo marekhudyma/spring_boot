@@ -56,6 +56,12 @@
 			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 
+		<!-- for oauth2 many providers -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-security</artifactId>
+      <version>1.1.1.RELEASE</version>
+    </dependency>
 
 		<!-- email -->
 		<dependency>

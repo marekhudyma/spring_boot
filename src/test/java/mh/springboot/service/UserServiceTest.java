@@ -40,10 +40,10 @@ public class UserServiceTest {
 
     @Test
     public void testCreate() throws Exception {
-        User saved = userService.createUser(new User("login", "name", "password"), ImmutableSet.of(RoleEnum.USER));
+        User saved = userService.createUser(new User(null, "login", "name", "password"), ImmutableSet.of(RoleEnum.USER));
 
         User actual = userRepository.findOne(saved.getId());
-        User expected = new User("login", "name", "password", ImmutableSet.of(new Role("ROLE_USER")));
+        User expected = new User(null, "login", "name", "password", ImmutableSet.of(new Role("ROLE_USER")));
 
         assertReflectionEquals(expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS);
     }

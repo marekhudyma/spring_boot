@@ -29,8 +29,8 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(userRepository.count() == 0) {
-            userService.createUser(new User("admin", "a", "marekAdmin"), ImmutableSet.of(RoleEnum.ADMIN, RoleEnum.USER));
-            userService.createUser(new User("user", "u", "marekUser"), ImmutableSet.of(RoleEnum.USER));
+            userService.createUser(new User(null, "admin", "a", "marekAdmin"), ImmutableSet.of(RoleEnum.ADMIN, RoleEnum.USER));
+            userService.createUser(new User(null, "user", "u", "marekUser"), ImmutableSet.of(RoleEnum.USER));
             logger.info("Default users created");
         }
     }

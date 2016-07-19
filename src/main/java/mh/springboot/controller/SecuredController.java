@@ -1,27 +1,35 @@
 package mh.springboot.controller;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import mh.springboot.model.security.User;
+import mh.springboot.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 public class SecuredController {
 
+    @Value("${facebook.client.clientId}")
+    private String facebookClientId;
+
+    @Value("${google.client.clientId}")
+    private String googleClientId;
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/secured")
-    public String secured(Model model, Principal principal){
+    public String secured(Model model){
         String username = "";
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else if(principal instanceof OAuth2Authentication) {
-            username = principal.getName(); //number of Facebook User
+        Optional<User> userOptional = userService.getLoggedUser();
+        if(userOptional.isPresent()) {
+            username = userOptional.get().getUsername();
         }
-
         model.addAttribute("username", username);
-
         return "secured";
     }
 

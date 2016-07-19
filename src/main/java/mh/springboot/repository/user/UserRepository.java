@@ -21,4 +21,11 @@ public interface UserRepository extends CrudRepository<User, Long> , UserDetails
     @Query("SELECT u FROM User u WHERE u.login = LOWER(:username)")
     User loadUserByUsername(@Param("username") String username) throws UsernameNotFoundException;
 
+    /**
+     * read user by externalID (OAUTH2)
+     * @param externalId
+     * @return User
+     * @throws UsernameNotFoundException
+     */
+    User findByExternalId(String externalId) throws UsernameNotFoundException;
 }

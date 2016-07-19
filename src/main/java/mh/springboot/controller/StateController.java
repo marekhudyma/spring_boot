@@ -1,11 +1,15 @@
 package mh.springboot.controller;
 
+import mh.springboot.model.security.User;
+import mh.springboot.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
+
 import static org.springframework.web.context.WebApplicationContext.SCOPE_SESSION;
 
 /**
@@ -18,14 +22,16 @@ public class StateController {
 
     private int i;
 
-    //TODO HUDYMA - check it
-    //    public Principal user(Principal principal) {
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(method= RequestMethod.GET)
     public Result state() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> loggedUser = userService.getLoggedUser();
+
         String username = "";
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+        if (loggedUser.isPresent()) {
+            username = loggedUser.get().getUsername();
         }
         return new Result(username, i++);
     }

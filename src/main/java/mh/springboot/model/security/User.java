@@ -25,36 +25,47 @@ public class User extends AbstractEntity implements UserDetails {
     public User() {
     }
 
-    public User(final String login,
-                final String password,
-                final String name) {
-        this(login, password, name, ImmutableSet.of());
+    public User(String externalId, String login, String password, String name) {
+        this(externalId, login, password, name, ImmutableSet.of());
     }
 
-    public User(final String login,
-                final String password,
-                final String name,
-                final Set<Role> roles) {
+    public User(String externalId, String login, String password, String name, Set<Role> roles) {
+        this.externalId = externalId;
         this.login = login;
         this.password = password;
         this.name = name;
         this.roles = roles;
     }
 
+    /**
+     * for example:
+     * FACEBOOK_10210381981735602
+     * GOOGLE_109591818087491991216
+     */
+    private String externalId;
+
     @NotEmpty
     private String name;
 
-    @NotEmpty
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = true)
     private String login;
 
-    @NotEmpty
     private String password;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
     private Set<Role> roles = new HashSet<>();
+
+    //-----------------------
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(final String externalId) {
+        this.externalId = externalId;
+    }
 
     public String getName() {
         return name;
