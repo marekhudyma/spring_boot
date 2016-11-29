@@ -36,4 +36,14 @@ public class ApplicationController {
         return "page_admin";
     }
 
+    @RequestMapping("/404.html")
+    public String page404(){
+        return "404";
+    }
+
+    @RequestMapping("/403.html")
+    public String page403(){
+        return "403";
+    }
+
 }
