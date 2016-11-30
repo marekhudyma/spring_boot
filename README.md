@@ -30,10 +30,8 @@
 <br />
 <br />TODO:
 <br />-add hashing for password,
-<br />-add csrf,
 <br />-add unit tests instead integration tests,
-<br />-add custom logout, forbidden page,
-<br />-add beter spring security tests,
+<br />-add better spring security tests,
 <br />-add more builders.
 <br />
 <br />BRANCHES:

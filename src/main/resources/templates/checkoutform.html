@@ -9,7 +9,7 @@
 <div class="container">
     <h2>Checkout Form</h2>
 
-    <form class="form-horizontal" th:object="${checkoutCommand}" th:action="@{/docheckout}" method="post">
+    <form class="form-horizontal" th:object="${checkoutCommand}" th:action="@{/docheckout}" method="POST">
 
         <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
             <p th:text="#{checkoutCommand.hasErrors}">Error Message</p>
