@@ -3,6 +3,8 @@ package mh.springboot.model.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableSet;
 import mh.springboot.model.core.AbstractEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,26 +18,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name="USER_ACCOUNT")
 public class User extends AbstractEntity implements UserDetails {
-
-    public User() {
-    }
-
-    public User(String externalId, String login, String password, String name) {
-        this(externalId, login, password, name, ImmutableSet.of());
-    }
-
-    public User(String externalId, String login, String password, String name, Set<Role> roles) {
-        this.externalId = externalId;
-        this.login = login;
-        this.password = password;
-        this.name = name;
-        this.roles = roles;
-    }
 
     /**
      * for example:
@@ -56,6 +44,21 @@ public class User extends AbstractEntity implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
     private Set<Role> roles = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(String externalId, String login, String password, String name) {
+        this(externalId, login, password, name, ImmutableSet.of());
+    }
+
+    public User(String externalId, String login, String password, String name, Set<Role> roles) {
+        this.externalId = externalId;
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.roles = roles;
+    }
 
     //-----------------------
 
@@ -130,5 +133,35 @@ public class User extends AbstractEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, created, lastModified, externalId, name, login, password, roles);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        return Objects.equals(this.id, other.id) &&
+               Objects.equals(this.created, other.created) &&
+               Objects.equals(this.lastModified, other.lastModified) &&
+               Objects.equals(this.externalId, other.externalId) &&
+               Objects.equals(this.name, other.name) &&
+               Objects.equals(this.login, other.login) &&
+               Objects.equals(this.password, other.password) &&
+               Objects.equals(this.roles, other.roles);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
+
 }
 

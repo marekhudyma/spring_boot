@@ -35,6 +35,10 @@ public class OAuth2AuthenticationSuccessEventHandler {
     @Value("${google.client.clientId}")
     private String googleClientId;
 
+    private final String FACEBOOK_PREFIX = "facebook_";
+
+    private final String GOOGLE_PREFIX = "google_";
+
     @RequestMapping("/logged")
     public String logged(){
         User userAssembled = assembleUserFromExternalId(facebookClientId, googleClientId);
@@ -42,10 +46,14 @@ public class OAuth2AuthenticationSuccessEventHandler {
             logger.info("User {} logged in",  userAssembled);
             User userLoaded = userService.findByExternalId(userAssembled.getExternalId());
             if(userLoaded != null) {
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userLoaded, null));
+                UsernamePasswordAuthenticationToken token =
+                        new UsernamePasswordAuthenticationToken(userLoaded, null, userLoaded.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(token);
             } else {
                 userService.createUser(userAssembled, ImmutableSet.of(RoleEnum.USER));
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userAssembled, null));
+                UsernamePasswordAuthenticationToken token =
+                        new UsernamePasswordAuthenticationToken(userAssembled, null, userAssembled.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
         return "index";
@@ -56,12 +64,14 @@ public class OAuth2AuthenticationSuccessEventHandler {
         if(authentication instanceof OAuth2Authentication) {
             String clientId = ((OAuth2Authentication)authentication).getOAuth2Request().getClientId();
             if(facebookClientId.equals(clientId)) {
-                String externalId = "FACEBOOK_" + authentication.getPrincipal().toString();
-                String name = (String) ((Map)((OAuth2Authentication) authentication).getUserAuthentication().getDetails()).get("name");
+                String externalId = FACEBOOK_PREFIX + authentication.getPrincipal().toString();
+                String name = (String) ((Map)((OAuth2Authentication) authentication)
+                        .getUserAuthentication().getDetails()).get("name");
                 return new User(externalId, externalId, null, name);
             } else if(googleClientId.equals(clientId)) {
-                String externalId = "GOOGLE_" + authentication.getPrincipal().toString();
-                String name = (String) ((Map)((OAuth2Authentication) authentication).getUserAuthentication().getDetails()).get("name");
+                String externalId = GOOGLE_PREFIX + authentication.getPrincipal().toString();
+                String name = (String) ((Map)((OAuth2Authentication) authentication)
+                        .getUserAuthentication().getDetails()).get("name");
                 return new User(externalId, externalId, null, name);
             }
         }
