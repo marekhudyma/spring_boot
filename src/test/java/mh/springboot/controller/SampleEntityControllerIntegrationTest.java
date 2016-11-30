@@ -7,7 +7,6 @@ import mh.springboot.repository.sampleentity.SampleEntityRepository;
 import mh.springboot.utils.PageAdapter;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -233,7 +232,6 @@ public class SampleEntityControllerIntegrationTest {
         assertEquals(expected, actual);
     }
 
-    @Ignore //TODO HUDYMA fix it
     @Test
     public void testEntityfindById_notExistingPage() throws Exception {
         ResponseEntity<?> response =  restTemplate.getForEntity("http://localhost:{port}/not_existing_page.html",

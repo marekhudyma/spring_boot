@@ -1,7 +1,6 @@
 package mh.springboot.security;
 
 import mh.springboot.SpringBootMainApplication;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,7 +71,6 @@ public class SecurityTest {
         assertTrue(result.getHtml().contains("Custom Login Page"));
     }
 
-    @Ignore //TODO HUDYMA FIX IT
     @Test
     public void testAdminPage_user() throws Exception {
         String url = String.format("http://localhost:%d/page_admin.html", port);
