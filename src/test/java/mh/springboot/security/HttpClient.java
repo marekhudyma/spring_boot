@@ -51,10 +51,12 @@ public class HttpClient {
     }
 
     public Result execute() throws IOException {
-        try (final WebClient webClient = new WebClient()) {
-            final HtmlPage page1 = webClient.getPage(url);
+        try (WebClient webClient = new WebClient()) {
+            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
 
-            if(!needToLogin) {
+            HtmlPage page1 = webClient.getPage(url);
+
+            if (!needToLogin) {
                 return new Result(200, page1.asXml());
             } else {
                 HtmlForm form = page1.getFormByName("f");

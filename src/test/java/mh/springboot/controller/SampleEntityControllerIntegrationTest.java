@@ -12,9 +12,8 @@ import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -22,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import java.util.HashSet;
@@ -38,9 +36,7 @@ import static org.junit.Assert.assertTrue;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = SpringBootMainApplication.class)
-@WebAppConfiguration
-@IntegrationTest({"server.port=0"})
+@SpringBootTest(classes = SpringBootMainApplication.class, webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class SampleEntityControllerIntegrationTest {
 
@@ -160,8 +156,7 @@ public class SampleEntityControllerIntegrationTest {
                                       String.class,
                                       port);
         String actual = response.getBody().toString();
-        String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type [java.lang.String] to required type [java.lang.Long]; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
-
+        String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
         assertEquals(400, response.getStatusCode().value());
         JSONAssert.assertEquals(expected, actual, false);
     }

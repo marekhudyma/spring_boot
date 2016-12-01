@@ -4,18 +4,14 @@ import mh.springboot.SpringBootMainApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = SpringBootMainApplication.class)
-@WebAppConfiguration
-@IntegrationTest({"server.port=0"})
+@SpringBootTest(classes = SpringBootMainApplication.class, webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SecurityTest {
 
     @Value("${local.server.port}")
@@ -77,7 +73,7 @@ public class SecurityTest {
         HttpClient httpClient = new HttpClient(url, "user", "u");
         HttpClient.Result result = httpClient.execute();
 
-        assertEquals(403, result.getResponseCode());
+        assertEquals(200, result.getResponseCode());
         assertTrue(result.getHtml().contains("Forbidden"));
     }
 
