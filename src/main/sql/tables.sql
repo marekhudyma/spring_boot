@@ -48,22 +48,9 @@ WITH (OIDS=FALSE);
 ALTER TABLE SAMPLE_ENTITY OWNER TO postgres;
 
 ----
-INSERT INTO user_account(id, external_id, created, last_modified, name, login, password) VALUES (1, null, now(), now(), 'marekUser', 'user', 'u');
+INSERT INTO user_account(id, external_id, created, last_modified, name, login, password) VALUES (1, null, now(), now(), 'marekUser', 'user', '$2a$10$9B95rrd8IIPQ9l2wTSl5O.fGyqEyJnGhEGLf6OXw6jm0N.4FEJFdC'); --paasword "u"
 INSERT INTO user_role(id, user_id, role_id) VALUES (1, 1, 1);
 
-INSERT INTO user_account(id, external_id, created, last_modified, name, login, password) VALUES (2, null, now(), now(), 'marekAdmin', 'admin', 'a');
+INSERT INTO user_account(id, external_id, created, last_modified, name, login, password) VALUES (2, null, now(), now(), 'marekAdmin', 'admin', '$2a$10$39agsgfMsh9U8WsU66cC6.Dkm4x9R0SGJnVv1EJpU9V58JiN42jMC'); --paasword "a"
 INSERT INTO user_role(id, user_id, role_id) VALUES (2, 2, 1);
 INSERT INTO user_role(id, user_id, role_id) VALUES (3, 2, 2);
-
-
-
-
-
-
-
-
-
-
-
-
-

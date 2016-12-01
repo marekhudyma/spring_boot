@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,8 +30,10 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(userRepository.count() == 0) {
-            userService.createUser(new User(null, "admin", "a", "marekAdmin"), ImmutableSet.of(RoleEnum.ADMIN, RoleEnum.USER));
-            userService.createUser(new User(null, "user", "u", "marekUser"), ImmutableSet.of(RoleEnum.USER));
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            userService.createUser(new User(null, "admin", encoder.encode("a"), "marekAdmin"), ImmutableSet.of(RoleEnum.ADMIN, RoleEnum.USER));
+            userService.createUser(new User(null, "user",  encoder.encode("u"), "marekUser"),  ImmutableSet.of(RoleEnum.USER));
             logger.info("Default users created");
         }
     }
