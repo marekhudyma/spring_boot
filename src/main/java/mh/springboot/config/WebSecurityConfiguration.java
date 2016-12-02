@@ -75,7 +75,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .and().sessionManagement().maximumSessions(1);
     }
 
     @Override
