@@ -63,3 +63,6 @@ mail.password: springboot
 
 logging.level.org.springframework.web: DEBUG
 logging.level.org.hibernate: DEBUG
+
+management.context-path: /admin
+logging.file: ../..spring_boot.log

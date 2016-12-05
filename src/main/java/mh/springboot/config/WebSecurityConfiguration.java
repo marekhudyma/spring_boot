@@ -68,6 +68,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/sampleentity").authenticated()
                 .antMatchers("/page_user").hasRole("USER")
                 .antMatchers("/page_admin").hasRole("ADMIN")
+                .antMatchers("/admin/*").hasRole("ADMIN")
                 .and().formLogin().loginPage("/login").permitAll()
                 .and().logout()
                 .permitAll()
