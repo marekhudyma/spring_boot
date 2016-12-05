@@ -11,37 +11,37 @@ public class ApplicationController {
         return "index";
     }
 
-    @RequestMapping("/index.html")
+    @RequestMapping("/index")
     public String index(){
         return "index";
     }
 
-    @RequestMapping("/login.html")
+    @RequestMapping("/login")
     public String login(){
         return "login";
     }
 
-    @RequestMapping("/page.html")
+    @RequestMapping("/page")
     public String page(){
         return "page";
     }
 
-    @RequestMapping("/page_user.html")
+    @RequestMapping("/page_user")
     public String pageUser(){
         return "page_user";
     }
 
-    @RequestMapping("/page_admin.html")
+    @RequestMapping("/page_admin")
     public String pageAdmin(){
         return "page_admin";
     }
 
-    @RequestMapping("/404.html")
+    @RequestMapping("/404")
     public String page404(){
         return "404";
     }
 
-    @RequestMapping("/403.html")
+    @RequestMapping("/403")
     public String page403(){
         return "403";
     }

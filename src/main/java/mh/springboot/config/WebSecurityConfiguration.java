@@ -66,9 +66,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/api/sampleentity").authenticated()
-                .antMatchers("/page_user.html").hasRole("USER")
-                .antMatchers("/page_admin.html").hasRole("ADMIN")
-                .and().formLogin().loginPage("/login.html").permitAll()
+                .antMatchers("/page_user").hasRole("USER")
+                .antMatchers("/page_admin").hasRole("ADMIN")
+                .and().formLogin().loginPage("/login").permitAll()
                 .and().logout()
                 .permitAll()
                 .deleteCookies("remove")
@@ -121,7 +121,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         CompositeFilter compositeFilter = new CompositeFilter();
         List<Filter> filters = new ArrayList<>();
         {
-            OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter("/login");
+            OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter("/login_facebook");
             OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
             filter.setRestTemplate(facebookTemplate);
             filter.setTokenServices(new UserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId()));

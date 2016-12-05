@@ -19,7 +19,7 @@ public class SecurityTest {
 
     @Test
     public void testPage_anonymous() throws Exception {
-        String url = String.format("http://localhost:%d/page.html", port);
+        String url = String.format("http://localhost:%d/page", port);
         HttpClient httpClient = new HttpClient(url);
         HttpClient.Result result = httpClient.execute();
 
@@ -29,7 +29,7 @@ public class SecurityTest {
 
     @Test
     public void testUserPage_anonymous() throws Exception {
-        String url = String.format("http://localhost:%d/page_user.html", port);
+        String url = String.format("http://localhost:%d/page_user", port);
         HttpClient httpClient = new HttpClient(url);
         HttpClient.Result result = httpClient.execute();
 
@@ -39,7 +39,7 @@ public class SecurityTest {
 
     @Test
     public void testUserPage_user() throws Exception {
-        String url = String.format("http://localhost:%d/page_user.html", port);
+        String url = String.format("http://localhost:%d/page_user", port);
         HttpClient httpClient = new HttpClient(url, "user", "u");
         HttpClient.Result result = httpClient.execute();
 
@@ -49,7 +49,7 @@ public class SecurityTest {
 
     @Test
     public void testUserPage_admin() throws Exception {
-        String url = String.format("http://localhost:%d/page_user.html", port);
+        String url = String.format("http://localhost:%d/page_user", port);
         HttpClient httpClient = new HttpClient(url, "admin", "a");
         HttpClient.Result result = httpClient.execute();
 
@@ -59,7 +59,7 @@ public class SecurityTest {
 
     @Test
     public void testAdminPage_anonymous() throws Exception {
-        String url = String.format("http://localhost:%d/page_admin.html", port);
+        String url = String.format("http://localhost:%d/page_admin", port);
         HttpClient httpClient = new HttpClient(url);
         HttpClient.Result result = httpClient.execute();
 
@@ -69,7 +69,7 @@ public class SecurityTest {
 
     @Test
     public void testAdminPage_user() throws Exception {
-        String url = String.format("http://localhost:%d/page_admin.html", port);
+        String url = String.format("http://localhost:%d/page_admin", port);
         HttpClient httpClient = new HttpClient(url, "user", "u");
         HttpClient.Result result = httpClient.execute();
 
@@ -79,7 +79,7 @@ public class SecurityTest {
 
     @Test
     public void testAdminPage_admin() throws Exception {
-        String url = String.format("http://localhost:%d/page_admin.html", port);
+        String url = String.format("http://localhost:%d/page_admin", port);
         HttpClient httpClient = new HttpClient(url, "admin", "a");
         HttpClient.Result result = httpClient.execute();
 
