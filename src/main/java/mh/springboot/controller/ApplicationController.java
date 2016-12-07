@@ -1,10 +1,13 @@
 package mh.springboot.controller;
 
+import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class ApplicationController {
+public class ApplicationController implements ErrorController {
+
+    public static final String ERROR_PATH = "/error";
 
     @RequestMapping("/")
     public String main(){
@@ -46,4 +49,13 @@ public class ApplicationController {
         return "403";
     }
 
+    @RequestMapping(ERROR_PATH)
+    public String error(){
+        return ERROR_PATH;
+    }
+
+    @Override
+    public String getErrorPath() {
+        return ERROR_PATH;
+    }
 }

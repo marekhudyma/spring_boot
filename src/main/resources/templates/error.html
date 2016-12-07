@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Sample Template</title>
+</head>
+<body>
+
+<div>Error occured</div>
+
+<table border="1">
+    <tr>
+        <th>httpCode</th>
+        <th>Errors</th>
+    </tr>
+    <tr>
+        <td><div th:text="${error.httpCode}">id</div></td>
+        <td><div th:text="${error.errors}">name</div></td>
+    </tr>
+</table>
+
+</body>
+</html>
