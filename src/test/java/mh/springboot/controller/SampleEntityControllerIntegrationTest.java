@@ -238,7 +238,7 @@ public class SampleEntityControllerIntegrationTest {
         assertTrue(actual.toLowerCase().contains("page not found"));
     }
 
-    private SampleEntity create(String name, UUID uuid) {
+    public static SampleEntity create(String name, UUID uuid) {
         SampleEntity entity = new SampleEntity();
         entity.setName(name);
         entity.setUuid(uuid);
