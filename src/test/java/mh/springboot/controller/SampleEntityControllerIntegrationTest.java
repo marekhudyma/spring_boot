@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +31,8 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static mh.springboot.utils.TestUuid.uuid;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
@@ -132,10 +133,10 @@ public class SampleEntityControllerIntegrationTest {
                                                                String.class,
                                                                port);
         String actual = response.getBody().toString();
-        String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"BAD_REQUEST\",\"message\":\"invalid id\"}]}";
+        String expected = "Error occurred".toLowerCase();
 
         assertEquals(400, response.getStatusCode().value());
-        JSONAssert.assertEquals(expected, actual, false);
+        assertThat(actual.toLowerCase(), containsString(expected));
     }
 
     @Test
@@ -144,10 +145,10 @@ public class SampleEntityControllerIntegrationTest {
                                       String.class,
                                       port);
         String actual = response.getBody().toString();
-        String expected = "{\"httpCode\":404,\"errors\":[{\"code\":\"NOT_FOUND\",\"message\":\"entity does not exist\"}]}";
+        String expected = "Error occurred".toLowerCase();
 
         assertEquals(404, response.getStatusCode().value());
-        JSONAssert.assertEquals(expected, actual, false);
+        assertThat(actual.toLowerCase(), containsString(expected));
     }
 
     @Test
@@ -156,9 +157,9 @@ public class SampleEntityControllerIntegrationTest {
                                       String.class,
                                       port);
         String actual = response.getBody().toString();
-        String expected = "{\"httpCode\":400,\"errors\":[{\"code\":\"TYPE_MISMATCH\",\"message\":\"Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \\\"abc\\\"\"}]}";
+        String expected = "Error occurred".toLowerCase();
         assertEquals(400, response.getStatusCode().value());
-        JSONAssert.assertEquals(expected, actual, false);
+        assertThat(actual.toLowerCase(), containsString(expected));
     }
 
     @Test
