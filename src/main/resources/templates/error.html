@@ -14,8 +14,8 @@
         <th>Errors</th>
     </tr>
     <tr>
-        <td><div th:text="${error.httpCode}">id</div></td>
-        <td><div th:text="${error.errors}">name</div></td>
+        <td><div th:text="${error != null} ? ${error.httpCode} : 'no error code'">id</div></td>
+        <td><div th:text="${error != null} ? ${error.errors} : 'no errors'">name</div></td>
     </tr>
 </table>
 
