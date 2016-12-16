@@ -1,0 +1,14 @@
+================================= HOW TO INSTAL JAVA =================================
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+
+//Traditional way
+download from: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+scp jdk-8u101-linux-x64.tar.gz root@{SERVER}:/root
+tar -vxzf jdk-8u101-linux-x64.tar.gz
+
+copy it to:  /opt/java-8.105
+create a symbilic link:
+ln -s /opt/java-8.105/bin/java /usr/bin/java

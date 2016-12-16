@@ -1,0 +1,26 @@
+===================== HOW TO INSTALL POSTGRES =====================
+//version with PPA https://launchpad.net/~webupd8team/+archive/ubuntu/java
+sudo apt-get update
+apt-get install postgresql-9.5postgre
+
+//allow users from all IPs to connect:
+vim /etc/postgresql/9.5/main/postgresql.conf
+add:
+listen_addresses = '*'
+vim /etc/postgresql/9.5/main/pg_hba.conf
+add:
+host all all 0.0.0.0/0 md5
+
+sudo /etc/init.d/postgresql stop
+sudo /etc/init.d/postgresql start
+
+//how to change a default password (default user: postgres, password: postgres)
+su - postgres
+psql postgres
+\password postgres
+//http://passwordsgenerator.net/
+
+tuning:
+vim /etc/postgresql/9.5/main/postgresql.conf
+by default there is cache in the memory:
+shared_buffers = 128MB

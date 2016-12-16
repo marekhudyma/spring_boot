@@ -1,0 +1,50 @@
+================================= DNS ================================
+//notes https://help.ubuntu.com/community/BIND9ServerHowto
+
+lets create a variables that you will use:
+MY_MASTER_IP  eg. 100.100.100.104
+MY_SLAVE_IP   eg. 100.100.100.105
+MY_DOMAIN     eg. myDomain.com
+
+************ MASTER SERVER ************
+apt-get install bind9 bind9-doc bind9-host
+bind9utils
+create a file with content: /etc/bind/db.MY_DOMAIN
+------ file /etc/bind/db.MY_DOMAIN ----------
+$TTL	1H
+@	IN	SOA	ns1.MY_DOMAIN. root.MY_DOMAIN. (
+			2016082301	; Serial
+			1H		; Refresh
+			15M		; Retry
+			2419200		; Expire
+			30M )	; Negative Cache TTL
+;
+@	IN	NS	ns1.MY_DOMAIN.
+@	IN	NS	ns2.MY_DOMAIN.
+@	IN	A	MY_MASTER_IP
+ns1	IN	A	MY_MASTER_IP
+ns2	IN	A	MY_SLAVE_IP
+
+www	IN	A	MY_MASTER_IP
+--------------------------------------------------
+append to file: /etc/bind/named.conf.local
+------ file /etc/bind/named.conf.local ----------
+zone "MY_DOMAIN"  { type master; file "/etc/bind/db.MY_DOMAIN"; allow-transfer { MY_SLAVE_IP; };};
+--------------------------------------------------
+service named9 restart
+
+************ SLAVE SERVER ************
+apt-get install bind9 bind9-doc bind9-host
+bind9utils
+append to file: /etc/bind/named.conf.local
+------ file /etc/bind/named.conf.local ----------
+zone "MY_DOMAIN"  { type slave; file "/var/cache/bind/db.MY_DOMAIN"; masters { MY_MASTER_IP; };};
+--------------------------------------------------
+service named9 restart
+
+--------------------------------------------------
+In the domain provider set:
+ns1.MY_DOMAIN   ip MY_MASTER_IP
+ns2.MY_DOMAIN   ip MY_SLAVE_IP
+
+
