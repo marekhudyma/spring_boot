@@ -2,34 +2,26 @@ package mh.springboot.repository.generic;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 
-@Converter(autoApply=true)
-@SuppressWarnings("unused")
-//JPA next should support Java 8 Date and Time types
-//https://java.net/jira/browse/JPA_SPEC-63
-public class OffsetDateTimeConverter implements AttributeConverter<OffsetDateTime, Date> {
+@Converter(autoApply = true)
+public class OffsetDateTimeConverter implements AttributeConverter<OffsetDateTime, Timestamp> {
 
     @Override
-    public Date convertToDatabaseColumn(OffsetDateTime offsetDateTime) {
-        if (offsetDateTime != null) {
-            Instant instant = Instant.from(offsetDateTime);
-            return Date.from(instant);
-        }
+    public Timestamp convertToDatabaseColumn(OffsetDateTime entityValue) {
+        if( entityValue == null )
+            return null;
 
-        return null;
+        return Timestamp.from(Instant.from(entityValue));
     }
 
     @Override
-        public OffsetDateTime convertToEntityAttribute(Date date) {
-        if (date != null) {
-            Instant instant = date.toInstant();
-            return instant.atOffset(ZoneOffset.UTC);
-        }
+    public OffsetDateTime convertToEntityAttribute(Timestamp databaseValue) {
+        if( databaseValue == null )
+            return null;
 
-        return null;
+        return OffsetDateTime.parse(databaseValue.toInstant().toString());
     }
 }

@@ -1,13 +1,23 @@
 ===================== HOW TO INSTALL POSTGRES =====================
-//version with PPA https://launchpad.net/~webupd8team/+archive/ubuntu/java
+
+
+-show ubuntu version (I got 16.04, xenial)
+lsb_release -a
+
+--for 16.04 I used:
+https://askubuntu.com/questions/831292/how-to-install-postgresql-9-6-on-any-ubuntu-version
+sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt-get update
-apt-get install postgresql-9.5postgre
+sudo apt-get install postgresql-9.6
+
+
 
 //allow users from all IPs to connect:
-vim /etc/postgresql/9.5/main/postgresql.conf
+vim /etc/postgresql/9.6/main/postgresql.conf
 add:
 listen_addresses = '*'
-vim /etc/postgresql/9.5/main/pg_hba.conf
+vim /etc/postgresql/9.6/main/pg_hba.conf
 add:
 host all all 0.0.0.0/0 md5
 
@@ -19,6 +29,8 @@ su - postgres
 psql postgres
 \password postgres
 //http://passwordsgenerator.net/
+
+\q
 
 tuning:
 vim /etc/postgresql/9.5/main/postgresql.conf

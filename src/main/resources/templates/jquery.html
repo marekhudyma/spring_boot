@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Sample Template</title>
+</head>
+<body>
+
+<div th:text="#{general.hello}">General hello (default)</div>
+<br />
+
+http://hmkcode.com/jquery-each-json/
+
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+    </tr>
+    <tr th:each="sampleEntity : ${sampleEntities}">
+        <td th:text="${sampleEntity.id}">id</td>
+        <td th:text="${sampleEntity.name}">name</td>
+    </tr>
+</table>
+
+
+<div th:include="fragments/footer :: footer(messageBefore='before', messageAfter=${sampleEntities.size()})">
+    <p>footer</p>
+</div>
+
+</body>
+</html>
+
+
