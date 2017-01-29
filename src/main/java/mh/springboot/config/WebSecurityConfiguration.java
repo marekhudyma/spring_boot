@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -45,7 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserRepository userRepository;
 
     @Autowired
-    OAuth2ClientContext oauth2ClientContext;
+    private OAuth2ClientContext oauth2ClientContext;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -69,10 +69,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/page_user").hasRole("USER")
                 .antMatchers("/page_admin").hasRole("ADMIN")
                 .antMatchers("/admin/*").hasRole("ADMIN")
-                .and().formLogin().loginPage("/login").permitAll()
+                .and().formLogin().loginPage("/login").permitAll().and()
+                .rememberMe()
+                .tokenValiditySeconds(86400) //24h
                 .and().logout()
                 .permitAll()
-                .deleteCookies("remove")
+                .deleteCookies("remember-me")
                 .invalidateHttpSession(true)
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")

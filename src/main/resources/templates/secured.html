@@ -39,6 +39,13 @@
                 <h2>User Has Role <b>User</b></h2>
             </div>
         </div>
+
+        <div class="row" sec:authorize="isRememberMe()">
+            <div class="col-md-10 col-md-offset-2">
+                <h2># This user is login by "Remember Me Cookies".</h2>
+            </div>
+        </div>
+
     </div>
 
 </body>
